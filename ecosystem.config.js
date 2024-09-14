@@ -4,7 +4,7 @@ module.exports = {
         name: 'bidvid-new',
         exec_mode: 'cluster',  
         instances: 'max',   
-        script: './node_modules/next/dist/bin/next',
+        script: './node_modules/next/.bin/next',
         args: 'start',
       }
     ]
