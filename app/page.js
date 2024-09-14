@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Star_row from "../component/star_row";
+import Image from "next/image";
 // import "../scroll/scrollStyle.css";
 
 const ScrollPage = () => {
@@ -113,98 +114,98 @@ const ScrollPage = () => {
               <div className=" column ">
                 <div className="column_1">
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                 </div>
               </div>
               <div className=" column">
                 <div className="column_2">
-                  <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                <div className="icons">
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                   <div className="icons">
-                    <img src="/youtube.png" alt="" />
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                     <div className="white">
-                      <img src="/x.png" alt="" />
+                      <img src="/assets/x.png" alt="" />
                     </div>
-                    <img src="/facebook.png" alt="" />
-                    <img src="/google.png" alt="" />
+                    <img src="/assets/facebook.png" alt="" />
+                    <img src="/assets/google.png" alt="" />
                   </div>
                 </div>
               </div>
@@ -217,7 +218,7 @@ const ScrollPage = () => {
           <div className="wrap time-content">
             <div className="content-area">
               <div className="image-box">
-                <img src="/whatis.png" alt="" />
+                <img src="/assets/whatis.png" alt="" />
               </div>
               <h3>What's Inside:</h3>
               <p>
@@ -241,7 +242,7 @@ const ScrollPage = () => {
                     <p>Plug and play</p>
                   </div>
                   <div className="icon">
-                    <img src="/twitter.png" alt="" />
+                    <img src="/assets/twitter.png" alt="" />
                   </div>
                 </div>
                 <div className="progress-bar">
@@ -255,7 +256,7 @@ const ScrollPage = () => {
                     <p>Plug and play</p>
                   </div>
                   <div className="icon">
-                    <img src="/youtube.png" alt="" />
+                    <img src="/assets/youtube.png" alt="" />
                   </div>
                 </div>
                 <div className="progress-bar">
@@ -269,7 +270,7 @@ const ScrollPage = () => {
                     <p>Plug and play</p>
                   </div>
                   <div className="icon">
-                    <img src="/instagram.png" alt="" />
+                    <img src="/assets/instagram.png" alt="" />
                   </div>
                 </div>
                 <div className="progress-bar">
@@ -285,7 +286,8 @@ const ScrollPage = () => {
           <div className="wrap">
             <div className="bento-grid">
               <div className="boxer boxer1">
-                <img src="/box1.png" alt="" />
+                <img src="/assets/box1.png" alt="" />
+                {/* <Image src="/assets/box1.png"  width={100} height={250}/> */}
                 <div className="content-boxer">
                   <h2>Increased Ad Revenue</h2>
                   <p>
@@ -302,10 +304,10 @@ const ScrollPage = () => {
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero,
                   a fugiat ipsa voluptatibus, quidem iste id vel non impedit
                 </p>
-                <img src="/box2.png" alt="" />
+                <img src="/assets/box2.png" alt="" />
               </div>
               <div className="boxer boxer3 row-box">
-                <img src="/box3.png" alt="" />
+                <img src="/assets/box3.png" alt="" />
                 <h2>Improved User Experience</h2>
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero,
@@ -323,7 +325,7 @@ const ScrollPage = () => {
                     impedit
                   </p>
                 </div>
-                <img src="/box4.png" alt="" />
+                <img src="/assets/box4.png" alt="" />
               </div>
             </div>
           </div>
@@ -333,13 +335,13 @@ const ScrollPage = () => {
           <div className="wrap">
             <div className="testimonial-content">
               <div className="intro">
-                <img src="/testi.png" alt="" />
+                <img src="/assets/testi.png" alt="" />
                 <div className="text-content">
                   <p className="tag">The Expert</p>
                   <h4>Hey, I'm Romina Kavcic</h4>
                 </div>
               </div>
-              <img src="/Container.png" alt="" />
+              <img src="/assets/Container.png" alt="" />
               <div className="text-content_2">
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit.

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 
-  basePath: '/bidvid',
+//   basePath: '/bidvid',
 };
 
 export default nextConfig;
