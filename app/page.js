@@ -41,7 +41,7 @@ const ScrollPage = () => {
       const progress = point.querySelector(".progress-bar .progress");
 
       progressbar.classList.remove("active");
-        revert(progress,progressbar)
+      revert(progress, progressbar);
       point.addEventListener("click", () => {
         points.forEach((p) => {
           const pb = p.querySelector(".progress-bar");
@@ -51,7 +51,7 @@ const ScrollPage = () => {
           revert(pr);
         });
         progressbar.classList.add("active");
-        move(progress,progressbar);
+        move(progress, progressbar);
       });
     });
   }, []);
@@ -59,13 +59,12 @@ const ScrollPage = () => {
     // Reset the progress bar width and remove 'active' class
     elem.style.width = "0%";
     console.log(progressbar);
-    
   }
-  
+
   function move(elem, progressbar) {
     let width = 1;
     progressbar.classList.add("active"); // Add 'active' class to start animation
-  
+
     const id = setInterval(() => {
       if (width >= 100) {
         clearInterval(id);
@@ -86,14 +85,16 @@ const ScrollPage = () => {
         <div className="banner">
           <div className="banner-wrapper">
             <div className="banner-content">
-              <h1>Revolutionising Bidding with</h1>
-              <h1 className="gradient-title">AI-Powered Optimisation</h1>
-              <p>
-                BidVids Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Assumenda sapiente id placeat nobis omnis deserunt cumque
-                aliquam eum, alias error!
-              </p>
-              <button>Contact Us</button>
+              <div className="banner-text">
+                <h1>Revolutionising Bidding with</h1>
+                <h1 className="gradient-title">AI-Powered Optimisation</h1>
+                <p>
+                  BidVids Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Assumenda sapiente id placeat nobis omnis deserunt
+                  cumque aliquam eum, alias error!
+                </p>
+                <button>Contact Us</button>
+              </div>
 
               <div className="ratings">
                 <div className="rating">
@@ -162,7 +163,7 @@ const ScrollPage = () => {
               </div>
               <div className=" column">
                 <div className="column_2">
-                <div className="icons">
+                  <div className="icons">
                     <img src="/assets/youtube.png" alt="" />
                     <img src="/assets/instagram.png" alt="" />
                     <div className="white">

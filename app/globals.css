@@ -221,13 +221,10 @@ body {
     background: rgb(255, 255, 255);
     background: -webkit-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(244, 244, 168, 1) 17%,
-      rgba(245, 234, 75, 1) 36%,
-      rgba(238, 136, 85, 1) 54%,
-      rgba(221, 131, 227, 1) 69%,
-      rgba(136, 73, 224, 1) 83%,
-      rgba(16, 0, 255, 1) 100%
+      #FFFDD0 0%,
+      #CFFF5E 27%,
+      #FF8E3C 53%,
+      #4330B7 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
