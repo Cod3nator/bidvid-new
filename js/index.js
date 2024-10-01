@@ -1,48 +1,48 @@
-const gradients = document.querySelectorAll('.gradient')
-const visibleGradients = new Set()
+// const gradients = document.querySelectorAll('.gradient')
+// const visibleGradients = new Set()
 
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      visibleGradients.add(entry.target)
-    } else {
-      visibleGradients.delete(entry.target)
-    }
-  })
-})
+// const observer = new IntersectionObserver(entries => {
+//   entries.forEach(entry => {
+//     if (entry.isIntersecting) {
+//       visibleGradients.add(entry.target)
+//     } else {
+//       visibleGradients.delete(entry.target)
+//     }
+//   })
+// })
 
-const throttle = fn => {
-  let scheduled = null
-  let context = null
+// const throttle = fn => {
+//   let scheduled = null
+//   let context = null
 
-  return function () {
-    context = [this, arguments]
+//   return function () {
+//     context = [this, arguments]
 
-    if (scheduled !== null) {
-      return
-    }
+//     if (scheduled !== null) {
+//       return
+//     }
 
-    scheduled = window.requestAnimationFrame(() => {
-      fn.apply(...context)
-      scheduled = context = null
-    })
-  }
-}
+//     scheduled = window.requestAnimationFrame(() => {
+//       fn.apply(...context)
+//       scheduled = context = null
+//     })
+//   }
+// }
 
-const updateGradient = gradient => {
-  const { top, height } = gradient.getBoundingClientRect()
+// const updateGradient = gradient => {
+//   const { top, height } = gradient.getBoundingClientRect()
 
-  gradient.style.setProperty(
-    '--scroll-percentage',
-    `${(top + height) / window.innerHeight * 100}%`
-  )
-}
+//   gradient.style.setProperty(
+//     '--scroll-percentage',
+//     `${(top + height) / window.innerHeight * 100}%`
+//   )
+// }
 
-gradients.forEach(gradient => {
-  updateGradient(gradient)
-  observer.observe(gradient)
-})
+// gradients.forEach(gradient => {
+//   updateGradient(gradient)
+//   observer.observe(gradient)
+// })
 
-window.addEventListener('scroll', throttle(() => {
-  visibleGradients.forEach(updateGradient)
-}))
+// window.addEventListener('scroll', throttle(() => {
+//   visibleGradients.forEach(updateGradient)
+// }))
