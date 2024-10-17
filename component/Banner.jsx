@@ -3,6 +3,7 @@ import Star_row from "./star_row";
 import Arrow_right from "./Arrow_right";
 
 const Banner = () => {
+  
   return (
     <div className="banner ">
       <div className="banner-wrapper">
@@ -10,8 +11,8 @@ const Banner = () => {
           <div className="banner-text-btn">
             <div className="banner-text">
               <div className="banner-heading">
-                <h1>Revolutionising Bidding with</h1>
-                <h1 className="">AI-Powered Optimisation</h1>
+                <h1 className="grey-text">Revolutionising Bidding with</h1>
+                <h1 >AI-Powered Optimisation</h1>
               </div>
               <p>
                 BidVids is a cutting-edge ad technology platform that uses
@@ -42,7 +43,7 @@ const Banner = () => {
           </div>
         </div>
         <div className="banner-img">
-          <img src="banner.png" alt="" srcset="" />
+          <img src="banner1.png" alt="Banner Image"  />
         </div>
       </div>
     </div>

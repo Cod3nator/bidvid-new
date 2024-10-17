@@ -1,6 +1,28 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 
 const Contact_us = () => {
+    
+  const [form, setForm] = useState(null);
+
+  useEffect(() => {
+    const formElement = document.getElementById('contact-form');
+    setForm(formElement); 
+
+    if (formElement) { 
+      formElement.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        console.log({
+          email: data.get("email"),
+          name: data.get("name"),
+          message: data.get("message"),
+          phone: data.get("phone"),
+        });
+      });
+    }
+  }, []);
+
   return (
     <section className="contact-container">
       <div className="container">
@@ -9,7 +31,7 @@ const Contact_us = () => {
           <h2>Get in touch with us. We're here to assist you.</h2>
         </div>
         <div className="contact-form">
-          <form className="contact">
+          <form className="contact" id="contact-form">
             <div className="form-inputs">
               <div className="user-details">
                 <div className="form-group">
@@ -42,8 +64,8 @@ const Contact_us = () => {
                 </div>
               </div>
             </div>
-            <button type="submit" className="inter-button">
-              <span>Leave us a Message</span>{" "}
+            <button type="submit" className="inter-button" >
+              <span>Leave us a Message</span>
               <img src="arrow-right.svg" alt="" />
             </button>
           </form>

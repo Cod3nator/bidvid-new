@@ -8,6 +8,8 @@ import Features from "@/component/Features";
 import Stats from "@/component/Stats";
 import Faq from "@/component/Faq";
 import Contact_us from "@/component/Contact_us";
+import Navbar from "@/component/navbar";
+import Footer from "@/component/Footer";
 // import "../scroll/scrollStyle.css";
 
 const ScrollPage = () => {
@@ -38,19 +40,20 @@ const ScrollPage = () => {
   //   }
   // }, [percentage]);
 
-
   return (
-  <>
-  <section className="scroll_page">
-  <Banner/>
-   
-   <WhatsInside/>
-<Features/>
-<Stats/>
-<Faq/>
-<Contact_us/>
-  </section>
-  {/* <div className="scroll-page-holder">
+    <>
+    <Navbar/>
+      <section className="scroll_page">
+        <Banner />
+
+        <WhatsInside />
+        <Features />
+        <Stats />
+        <Faq />
+        <Contact_us />
+      </section>
+      <Footer/>
+      {/* <div className="scroll-page-holder">
     <section className="scroll_page">
       <div className="scroll_wrapper" id="scrollWrapper">
    
