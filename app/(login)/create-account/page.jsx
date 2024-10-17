@@ -1,14 +1,17 @@
 "use client";
 import PasswordInput from "@/component/PasswordInput";
+import moment from "moment";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    userId: "",
-    password: "",
+    name: '',
+    email: '',
+    userId: '',
+    password: '',
+    createdAt: moment().format("YYYY-MM-DD HH:mm:ss"), 
   });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
 
@@ -23,11 +26,27 @@ const Page = () => {
   const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-
+    const resp = await createUser(formData); 
+  if(resp.success){
+    router.push('/dashboard');
+  }
+    
   };
 
- 
+  async function createUser(data) {
+    const res = await fetch("/api/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), 
+    });
+
+    const responseData = await res.json();
+    return responseData;
+
+  }
+
 
   return (
     <>

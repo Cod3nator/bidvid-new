@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    userId: '',
+    email: '',
     password: '',
   });
   
@@ -24,8 +24,25 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Login Data:", formData);
-    router.push('/dashboard');
-  };
+
+    const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        router.push('/dashboard');
+    } else {
+      alert(data.message); 
+        console.error('Login failed:', data.message);
+     
+    }
+};
 
   const handleForgotPassword = () => {
     setIsModalOpen(true);
@@ -63,7 +80,7 @@ const Page = () => {
                 <div className="form-group">
                   <input
                     type="text"
-                    name="userId"
+                    name="email"
                     placeholder="User ID"
                     value={formData.userId}
                     onChange={handleChange}
