@@ -7,18 +7,18 @@ const Toast = ({ success, message }) => {
     setVisible(false);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, 5000);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setVisible(false);
+  //   }, 5000);
 
-    return () => clearTimeout(timer); 
-  }, []);
+  //   return () => clearTimeout(timer); 
+  // }, []);
 
   if (!visible) return null; 
 
   return (
-    <div className={`absolute bottom-10 end-0  transition-transform duration-500 ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div className={`absolute transition-transform duration-500 ${visible ? 'translate-x-1/2' : 'translate-x-full'}`} style={{right:"10px",bottom:"20px"}}>
       <div
         className={`max-w-xs ${success ? 'bg-teal-100 border-teal-200  text-teal-800' : 'bg-red-100 border-red-200 text-red-800'} border text-sm rounded-lg dark:bg-red-800/10 dark:border-red-900 dark:text-red-500`}
         role="alert"

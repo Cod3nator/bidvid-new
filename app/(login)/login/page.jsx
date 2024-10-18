@@ -80,6 +80,7 @@ const Page = () => {
       {toastSuccess !== null && (
         <Toast success={toastSuccess} message={toastMessage} />
       )}
+      <Toast success={false} message={"just pass this "}/>
 
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
