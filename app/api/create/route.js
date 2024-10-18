@@ -7,12 +7,10 @@ export async function POST(req) {
     try {
         const body = await req.json(); 
         
-        // Check if the required fields are present
         if (!body.name || !body.email || !body.password || !body.userId) {
             return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
         }
 
-        // Hash the user's password
         const hashedPassword = await bcrypt.hash(body.password, 10);
         
         const user = {

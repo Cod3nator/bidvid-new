@@ -1,4 +1,5 @@
 "use client";
+import Toast from "@/component/dashboard/Toast";
 import PasswordInput from "@/component/PasswordInput";
 import moment from "moment";
 import { useRouter } from "next/navigation";
