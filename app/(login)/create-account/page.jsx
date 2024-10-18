@@ -2,7 +2,7 @@
 import PasswordInput from "@/component/PasswordInput";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const Page = () => {
   const [formData, setFormData] = useState({
@@ -10,10 +10,16 @@ const Page = () => {
     email: '',
     userId: '',
     password: '',
-    createdAt: moment().format("YYYY-MM-DD HH:mm:ss"), 
+    createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState("");
+
+  
+
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSuccess, setToastSuccess] = useState(null); 
+
+  const [passwordMatchError, setPasswordMatchError] = useState(false); 
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,16 +27,39 @@ const Page = () => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "password" || name === "confirmPassword") {
+      setPasswordMatchError(false);
+    }
   };
 
-  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const resp = await createUser(formData); 
-  if(resp.success){
-    router.push('/dashboard');
-  }
+    console.log(formData);
     
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordMatchError(true);
+      return;
+    }
+    
+    setPasswordMatchError(false);
+
+    const data = await createUser(formData);
+    if (data.success) {
+      setToastSuccess(true); 
+      setToastMessage("Login successful");
+      setTimeout(() => {
+        setToastSuccess(null); 
+        router.push("/dashboard");
+      }, 5000);
+    } else {
+      setToastSuccess(false);  
+      setToastMessage(data.message || "Login failed");
+      setTimeout(() => {
+        setToastSuccess(null);  
+      }, 5000);
+      console.error("Login failed:", data.message);
+    }
+   
   };
 
   async function createUser(data) {
@@ -39,17 +68,18 @@ const Page = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data), 
+      body: JSON.stringify(data),
     });
 
     const responseData = await res.json();
     return responseData;
-
   }
-
 
   return (
     <>
+        {toastSuccess !== null && (
+        <Toast success={toastSuccess} message={toastMessage} />
+      )}
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
@@ -70,7 +100,7 @@ const Page = () => {
                     type="text"
                     name="name"
                     placeholder="Full Name"
-                    value={formData.name} // Update this in your state
+                    value={formData.name}
                     onChange={handleChange}
                     className="p-2 w-full"
                     required
@@ -88,7 +118,7 @@ const Page = () => {
                     type="email"
                     name="email"
                     placeholder="Email Address"
-                    value={formData.email} // Update this in your state
+                    value={formData.email}
                     onChange={handleChange}
                     className="p-2 w-full"
                     required
@@ -108,7 +138,7 @@ const Page = () => {
                     placeholder="User ID"
                     value={formData.userId}
                     onChange={handleChange}
-                    className="p-2 w-full "
+                    className="p-2 w-full"
                     required
                   />
                   <label htmlFor="userId" className="text-sm text-gray-500">
@@ -133,9 +163,9 @@ const Page = () => {
                     type="password"
                     name="confirmPassword"
                     placeholder="Confirm Password"
-                    value={formData.confirmPassword} 
+                    value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="p-2 w-full "
+                    className="p-2 w-full"
                     required
                   />
                   <label
@@ -145,6 +175,11 @@ const Page = () => {
                     Confirm Password
                   </label>
                 </div>
+                {passwordMatchError && (
+                  <small className="text-red-500">
+                    Passwords do not match.
+                  </small>
+                )}
               </div>
 
               <button
@@ -154,13 +189,6 @@ const Page = () => {
                 Create Account
               </button>
             </form>
-
-            {/* <p
-              className="mt-4 text-blue-600 cursor-pointer"
-              onClick={handleForgotPassword}
-            >
-              Forgot Password?
-            </p> */}
 
             <div className="flex items-center justify-between mt-6">
               <span>

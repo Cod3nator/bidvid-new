@@ -1,23 +1,29 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 import db from "../../config/db.js";
 import { v4 as uuidv4 } from 'uuid'; 
-import moment from 'moment';
-
+import bcrypt from 'bcrypt';
 
 export async function POST(req) {
     try {
         const body = await req.json(); 
+        
+        // Check if the required fields are present
+        if (!body.name || !body.email || !body.password || !body.userId) {
+            return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
+        }
 
+        // Hash the user's password
+        const hashedPassword = await bcrypt.hash(body.password, 10);
+        
         const user = {
             id: uuidv4(), 
             name: body.name,
             email: body.email,
             user_id: body.userId, 
-            password: body.password,
+            password: hashedPassword,
             created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
         };
 
-        // Corrected SQL query
         const query = `
             INSERT INTO users (name, email, user_id, password, created_at)
             VALUES (?, ?, ?, ?, ?)
@@ -28,26 +34,25 @@ export async function POST(req) {
             user.email,
             user.user_id,
             user.password,
-            user.created_at, // Include createdAt
+            user.created_at, 
         ];
 
-        // db.query(query, values, (err, result) => {
-        //     if (err) {
-        //         console.error('Error inserting user:', err);
-        //         return new Response(JSON.stringify({success: false, error: 'Error inserting user' }), {
-        //             status: 500,
-        //         });
-        //     }
-        //     // console.log('User inserted successfully:', result);
-        // });
-
-        return new Response(JSON.stringify({success: true, message: 'User created successfully' }), {
-            status: 201,
+        const result = await new Promise((resolve, reject) => {
+            db.query(query, values, (err, result) => {
+                if (err) {
+                    console.error('Error inserting user:', err);
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
         });
+
+        return NextResponse.json({ success: true, message: 'User created successfully' }, { status: 201 });
+
     } catch (error) {
         console.error('Error handling request:', error);
-        return new Response(JSON.stringify({ error: 'Error processing request' }), {
-            status: 500,
-        });
+
+        return NextResponse.json({ success: false, message: 'Error processing request' }, { status: 500 });
     }
 }

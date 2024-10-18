@@ -12,6 +12,7 @@ const Navbar = () => {
       
       <div className="flex items-center space-x-16">
      <menu className="flex items-center space-x-4">
+      <a href='/dashboard/stats' className="text-white hover:text-blue-400">Stats</a>
      <a href="/autoplugin" className="text-white hover:text-blue-400">AutoPlugin</a>
         <a href="/partners" className="text-white hover:text-blue-400">Partners</a>
         <a href="/user-management" className="text-white hover:text-blue-400">User Management</a>

@@ -1,16 +1,20 @@
-'use client';
-import PasswordInput from '@/component/PasswordInput';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+"use client";
+import Toast from "@/component/dashboard/Toast";
+import PasswordInput from "@/component/PasswordInput";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
+
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSuccess, setToastSuccess] = useState(null); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,28 +25,37 @@ const Page = () => {
   };
 
   const router = useRouter();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Login Data:", formData);
 
-    const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
     });
 
     const data = await res.json();
 
     if (data.success) {
-        router.push('/dashboard');
+      setToastSuccess(true); 
+      setToastMessage("Login successful");
+      setTimeout(() => {
+        setToastSuccess(null); 
+        router.push("/dashboard");
+      }, 5000);
     } else {
-      alert(data.message); 
-        console.error('Login failed:', data.message);
-     
+      setToastSuccess(false);  
+      setToastMessage(data.message || "Login failed");
+      setTimeout(() => {
+        setToastSuccess(null);  
+      }, 5000);
+      console.error("Login failed:", data.message);
     }
-};
+  };
 
   const handleForgotPassword = () => {
     setIsModalOpen(true);
@@ -58,13 +71,16 @@ const Page = () => {
 
   const handleSendLink = (e) => {
     e.preventDefault();
-    // Here you would typically send the email to the server to handle the reset link
     console.log("Reset password link sent to:", email);
-    handleCloseModal(); // Close the modal after sending
+    handleCloseModal(); 
   };
 
   return (
     <>
+      {toastSuccess !== null && (
+        <Toast success={toastSuccess} message={toastMessage} />
+      )}
+
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
@@ -86,7 +102,9 @@ const Page = () => {
                     onChange={handleChange}
                     className=" p-2 w-full"
                   />
-                  <label htmlFor="userId" className="text-sm text-gray-500">User ID</label>
+                  <label htmlFor="userId" className="text-sm text-gray-500">
+                    User ID
+                  </label>
                 </div>
               </div>
 
@@ -105,14 +123,19 @@ const Page = () => {
               </button>
             </form>
 
-            <p className="mt-4 text-blue-600 cursor-pointer" onClick={handleForgotPassword}>
+            <p
+              className="mt-4 text-blue-600 cursor-pointer"
+              onClick={handleForgotPassword}
+            >
               Forgot Password?
             </p>
 
-            <div className='flex items-center justify-between mt-6'>
-              {/* <span>Or login with</span> */}
+            <div className="flex items-center justify-between mt-6">
               <span>
-                Don't have an account? <a href='/create-account' className="text-blue-600">Sign Up</a>
+                Don't have an account?{" "}
+                <a href="/create-account" className="text-blue-600">
+                  Sign Up
+                </a>
               </span>
             </div>
           </div>
@@ -121,48 +144,53 @@ const Page = () => {
 
       {/* Forgot Password Modal */}
       {isModalOpen && (
-  <>
-    {/* Backdrop */}
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-      onClick={handleCloseModal}
-    />
-    {/* Modal */}
-    <div className="absolute bg-white p-6 shadow-md w-96 flex flex-col justify-center items-center " style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)',zIndex: 999 }}>
-      <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
-      <form onSubmit={handleSendLink}>
-        <div className="form-group mb-4">
-          <input
-            type="text"
-            name="userId" 
-            placeholder="User ID"
-            value={formData.userId}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            onClick={handleCloseModal}
           />
-          <label htmlFor="userId" className="text-sm text-gray-500">User ID</label>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Send Reset Link
-        </button>
-      </form>
-      <button
-        className="mt-4 text-red-600"
-        onClick={handleCloseModal}
-      >
-        Close
-      </button>
-    </div>
-  </>
-)}
-
-
+          {/* Modal */}
+          <div
+            className="absolute bg-white p-6 shadow-md w-96 flex flex-col justify-center items-center "
+            style={{
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 999,
+            }}
+          >
+            <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
+            <form onSubmit={handleSendLink}>
+              <div className="form-group mb-4">
+                <input
+                  type="text"
+                  name="userId"
+                  placeholder="User ID"
+                  value={formData.userId}
+                  onChange={handleChange}
+                  className="border p-2 w-full"
+                  required
+                />
+                <label htmlFor="userId" className="text-sm text-gray-500">
+                  User ID
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Send Reset Link
+              </button>
+            </form>
+            <button className="mt-4 text-red-600" onClick={handleCloseModal}>
+              Close
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
-}
+};
 
 export default Page;
