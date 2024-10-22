@@ -1,4 +1,4 @@
-import Navbar from "./components/Dash_Navbar";
+import Navbar from "./dashboard/components/Dash_Navbar";
 
 
 export const metadata = {
@@ -10,7 +10,6 @@ export const metadata = {
     return (
       <>
       <div className="login-layout">
-        <Navbar/>
         {children}
       </div>
       </>

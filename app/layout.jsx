@@ -1,6 +1,5 @@
 import "./globals.css";
-import Navbar from "@/component/navbar";
-import Footer from "@/component/Footer";
+
 
 export const metadata = {
   title: "BidVid",
@@ -19,9 +18,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        {/* <Navbar /> */}
         {children}
-        {/* <Footer /> */}
       </body>
     </html>
   );

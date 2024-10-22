@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 
+
 const Contact_us = () => {
     
   const [form, setForm] = useState(null);
@@ -99,5 +100,6 @@ const Contact_us = () => {
     </section>
   );
 };
+
 
 export default Contact_us;

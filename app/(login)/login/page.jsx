@@ -1,6 +1,6 @@
 "use client";
-import Toast from "@/component/dashboard/Toast";
-import PasswordInput from "@/component/PasswordInput";
+import Toast from "../../../component/dashboard/Toast";
+import PasswordInput from "../../../component/PasswordInput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -11,10 +11,10 @@ const Page = () => {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState("");
-
   const [toastMessage, setToastMessage] = useState("");
   const [toastSuccess, setToastSuccess] = useState(null); 
+  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(false); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,32 +28,41 @@ const Page = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
+    setLoading(true);
+    setError(null);
+ 
+    try{
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Login-in failed'); 
+      }
+      localStorage.setItem('sessionToken', data.sessionToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
       setToastSuccess(true); 
       setToastMessage("Login successful");
       setTimeout(() => {
         setToastSuccess(null); 
         router.push("/dashboard");
-      }, 5000);
-    } else {
+      }, 500);
+    }catch (error) {
+      setError(error.message);
       setToastSuccess(false);  
-      setToastMessage(data.message || "Login failed");
+      setToastMessage(error.message || "Login failed");
       setTimeout(() => {
         setToastSuccess(null);  
       }, 5000);
-      console.error("Login failed:", data.message);
+      console.error("Login failed:", error.message);
+    }finally{
+      setLoading(false); 
     }
   };
 
@@ -65,10 +74,7 @@ const Page = () => {
     setIsModalOpen(false);
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
+ 
   const handleSendLink = (e) => {
     e.preventDefault();
     console.log("Reset password link sent to:", email);
@@ -119,8 +125,8 @@ const Page = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Log In
+                disabled={loading}>
+                {loading ? 'Logging in...' : 'Login'}
               </button>
             </form>
 

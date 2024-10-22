@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 
-import Banner from "@/component/Banner";
-import WhatsInside from "@/component/WhatsInside";
-import Features from "@/component/Features";
-import Stats from "@/component/Stats";
-import Faq from "@/component/Faq";
-import Contact_us from "@/component/Contact_us";
-import Navbar from "@/component/navbar";
-import Footer from "@/component/Footer";
+import Banner from "../component/Banner";
+import WhatsInside from "../component/WhatsInside";
+import Features from "../component/Features";
+import Stats from "../component/Stats";
+import Faq from "../component/Faq";
+import Contact_us from "../component/Contact_us";
+import Navbar from "../component/navbar";
+import Footer from "../component/Footer";
 // import "../scroll/scrollStyle.css";
 
 const ScrollPage = () => {

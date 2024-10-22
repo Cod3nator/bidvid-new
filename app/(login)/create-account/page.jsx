@@ -1,25 +1,24 @@
 "use client";
-import Toast from "@/component/dashboard/Toast";
-import PasswordInput from "@/component/PasswordInput";
+import Toast from "../../../component/dashboard/Toast";
+import PasswordInput from "../../../component/PasswordInput";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    userId: '',
-    password: '',
-    createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+    name: "",
+    email: "",
+    userId: "",
+    password: "",
   });
 
-  
-
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [toastSuccess, setToastSuccess] = useState(null); 
+  const [toastSuccess, setToastSuccess] = useState(null);
 
-  const [passwordMatchError, setPasswordMatchError] = useState(false); 
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -35,50 +34,56 @@ const Page = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    
+    setLoading(true);
+    setError(null);
+    // console.log(formData);
+
     if (formData.password !== formData.confirmPassword) {
       setPasswordMatchError(true);
       return;
     }
-    
     setPasswordMatchError(false);
 
-    const data = await createUser(formData);
-    if (data.success) {
-      setToastSuccess(true); 
-      setToastMessage("Login successful");
+    try {
+      const response = await fetch("/api/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Sign-in failed");
+      }
+      localStorage.setItem("sessionToken", data.sessionToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+
+      console.log("Sign-in successful:", data);
+      setToastSuccess(true);
+      setToastMessage("Sign In successful");
       setTimeout(() => {
-        setToastSuccess(null); 
+        setToastSuccess(null);
         router.push("/dashboard");
-      }, 5000);
-    } else {
-      setToastSuccess(false);  
-      setToastMessage(data.message || "Login failed");
+      }, 500);
+    } catch (error) {
+      setError(error.message);
+      setToastSuccess(false);
+      setToastMessage(error.message || "Sign-in failed");
       setTimeout(() => {
-        setToastSuccess(null);  
+        setToastSuccess(null);
       }, 5000);
-      console.error("Login failed:", data.message);
+      console.error("Sign-in failed:", error.message);
+    } finally {
+      setLoading(false);
     }
-   
   };
-
-  async function createUser(data) {
-    const res = await fetch("/api/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const responseData = await res.json();
-    return responseData;
-  }
 
   return (
     <>
-        {toastSuccess !== null && (
+      {toastSuccess !== null && (
         <Toast success={toastSuccess} message={toastMessage} />
       )}
       <div className="flex min-h-screen">
@@ -186,8 +191,8 @@ const Page = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Create Account
+                disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
 

@@ -1,6 +1,7 @@
-import Contact_us from '@/component/Contact_us';
+"use client"
+import Contact_us from '../../component/Contact_us';
 import React from 'react'
-import Navbar from '@/component/navbar';
+import Navbar from '../../component/navbar';
 
 const About_us = () => {
   const teamMembers = [

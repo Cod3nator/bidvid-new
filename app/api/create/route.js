@@ -1,56 +1,77 @@
 import { NextResponse } from "next/server";
-import db from "../../config/db.js";
-import { v4 as uuidv4 } from 'uuid'; 
-import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRATION = process.env.JWT_EXPIRATION; 
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION; 
 export async function POST(req) {
-    try {
-        const body = await req.json(); 
-        
-        if (!body.name || !body.email || !body.password || !body.userId) {
-            return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
-        }
+  try {
+    const { name, email, password, userId } = await req.json();
 
-        const hashedPassword = await bcrypt.hash(body.password, 10);
-        
-        const user = {
-            id: uuidv4(), 
-            name: body.name,
-            email: body.email,
-            user_id: body.userId, 
-            password: hashedPassword,
-            created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
-        };
-
-        const query = `
-            INSERT INTO users (name, email, user_id, password, created_at)
-            VALUES (?, ?, ?, ?, ?)
-        `;
-
-        const values = [
-            user.name,
-            user.email,
-            user.user_id,
-            user.password,
-            user.created_at, 
-        ];
-
-        const result = await new Promise((resolve, reject) => {
-            db.query(query, values, (err, result) => {
-                if (err) {
-                    console.error('Error inserting user:', err);
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-
-        return NextResponse.json({ success: true, message: 'User created successfully' }, { status: 201 });
-
-    } catch (error) {
-        console.error('Error handling request:', error);
-
-        return NextResponse.json({ success: false, message: 'Error processing request' }, { status: 500 });
+    if (!name || !email || !password || !userId) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400 }
+      );
     }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "User with this email already exists" ,success:false,message: "User with this email already exists" },
+        { status: 400 }
+      );
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = await prisma.user.create({
+        data: {
+          name,
+          email,
+          user_id: userId,
+          password: hashedPassword,
+        },
+      });
+
+      const sessionToken = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
+        expiresIn: JWT_EXPIRATION,
+      });
+      const refreshToken = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
+        expiresIn: REFRESH_TOKEN_EXPIRATION,
+      });
+
+      await prisma.refreshToken.create({
+        data: {
+          userId: newUser.id,
+          token: refreshToken,
+        },
+      });
+
+      return NextResponse.json(
+        {
+          success: true,
+          message: "User created successfully",
+          sessionToken,
+          refreshToken,
+          user: newUser,
+        },
+        { status: 201 }
+      );
+      
+    }
+  } catch (error) {
+    console.error("Error handling request:", error);
+
+    return NextResponse.json(
+      { success: false, message: "Error processing request" },
+      { status: 500 }
+    );
+  }
 }
