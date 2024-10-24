@@ -460,6 +460,14 @@ h1 {
 .time-content .content-area {
   width: 55%;
 }
+
+/* test area */
+.content-context{
+  display: none;
+}
+.content-context.active{
+  display: block;
+}
 .inside-content {
   display: flex;
   justify-content: center;
@@ -559,12 +567,12 @@ h1 {
 .progress-bar .progress {
   height: inherit;
   width: 0%;
-  background-color: greenyellow;
+  background-color: var(--blue);
   /* This will not work with 0s */
 }
 
 .progress-bar .progress.active {
-  animation: grow 7s forwards;
+  animation: grow 7s linear;
 }
 
 @keyframes grow {
@@ -1231,7 +1239,7 @@ h1 {
   text-align: center;
 }
 .stat-key{
-  font-size: 50px;
+  font-size: 40px;
   font-weight: 700;
   color: var(--blue);
 }
@@ -1242,7 +1250,7 @@ h1 {
 }
 .stat-point p{
   margin-top: 7px;
-  font-size: 18px;
+  font-size: 16px;
 }
 @media (max-width : 768px) {
   .stats-wrapper{

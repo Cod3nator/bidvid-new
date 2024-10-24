@@ -15,7 +15,7 @@ const Page = () => {
   const [toastSuccess, setToastSuccess] = useState(null); 
   const [error, setError] = useState(null); 
   const [loading, setLoading] = useState(false); 
-
+  const [restPassMail, setRestPassMail] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -75,10 +75,28 @@ const Page = () => {
   };
 
  
-  const handleSendLink = (e) => {
+  const handldResetPass =async (e) => {
     e.preventDefault();
-    console.log("Reset password link sent to:", email);
-    handleCloseModal(); 
+    try {
+      const response = await fetch("/api/reset-password/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: restPassMail }), 
+      });
+
+      if (response.ok) {
+        router.push("/reset-password/?email=" + restPassMail);
+      } else {
+        alert("Email not found or request failed");
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      alert("An error occurred. Please try again.");
+    }
+
+    handleCloseModal();
   };
 
 
@@ -168,29 +186,29 @@ const Page = () => {
             }}
           >
             <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
-            <form onSubmit={handleSendLink}>
+            <form onSubmit={handldResetPass}>
               <div className="form-group mb-4">
                 <input
                   type="text"
-                  name="userId"
-                  placeholder="User ID"
+                  name="email"
+                  placeholder="Email Id"
                   value={formData.userId}
-                  onChange={handleChange}
+                  onChange={(e)=>{setRestPassMail(e.target.value)}}
                   className="border p-2 w-full"
                   required
                 />
-                <label htmlFor="userId" className="text-sm text-gray-500">
-                  User ID
+                <label htmlFor="email" className="text-sm text-gray-500">
+                  Email Id
                 </label>
               </div>
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                Send Reset Link
+                Reset Password
               </button>
             </form>
-            <button className="mt-4 text-red-600" onClick={handleCloseModal}>
+            <button className="w-full mt-4 text-red-600 bg-red-200 hover:bg-red-300 rounded-md py-2" onClick={handleCloseModal}>
               Close
             </button>
           </div>

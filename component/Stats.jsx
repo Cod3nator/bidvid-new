@@ -7,31 +7,31 @@ const Stats = () => {
         <div className="stats-wrapper container">
         <div className="stat-point">
             <div className="stat-key">
-                99%
+                22% Saving
             </div>
-            <h5>Customer satisfaction</h5>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+            <h5>Beverage client</h5>
+            <p>BidVid has delivered 22% CPM efficiency</p>
         </div>
         <div className="stat-point">
             <div className="stat-key">
-                32M
+                30% Saving
             </div>
-            <h5>Active users</h5>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+            <h5>Entertainment client</h5>
+            <p>BidVid has delivered 30% CPM efficiency</p>
         </div>
         <div className="stat-point">
             <div className="stat-key">
-                125+
+            20% Saving
             </div>
-            <h5>Team members</h5>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+            <h5>Pharma client</h5>
+            <p>BidVid has delivered 20% CPM efficiency</p>
         </div>
         <div className="stat-point">
             <div className="stat-key">
-                240%
+            25% Saving
             </div>
-            <h5>Company growth</h5>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+            <h5>FMCG client</h5>
+            <p>BidVid has delivered 25% CPM efficiency</p>
         </div>
 
         </div>

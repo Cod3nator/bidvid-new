@@ -17,7 +17,7 @@ export async function POST(req) {
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return NextResponse.json(
-        { error: "Invalid email or password",success: false ,message: "Invalid email or password" },
+        { success: false ,message: "Invalid email or password" },
         { status: 401 }
       );
     } else {
