@@ -1,12 +1,12 @@
-import { prisma } from "../../lib/prisma"; // Assuming Prisma is used for DB
+import { prisma } from "../../lib/prisma";  
 import jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer'; // For sending emails
+import nodemailer from 'nodemailer';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { email } = req.body;
+export async function POST(req) {
+  try {
+    const { email } = await req.json();
 
     // Check if user exists
     const user = await prisma.user.findUnique({
@@ -14,13 +14,13 @@ export default async function handler(req, res) {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return new Response(JSON.stringify({ message: "User not found" }), { status: 404 });
     }
 
     // Create a password reset token
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
 
-    // Send email with the reset link
+    // Set up nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail', 
       auth: {
@@ -38,12 +38,13 @@ export default async function handler(req, res) {
       text: `Click here to reset your password: ${resetLink}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return res.status(500).json({ message: 'Error sending email' });
-      } else {
-        return res.status(200).json({ message: 'Reset link sent' });
-      }
-    });
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.response);
+
+    return new Response(JSON.stringify({ message: 'Reset link sent' }), { status: 200 });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return new Response(JSON.stringify({ message: 'Error sending email' }), { status: 500 });
   }
 }

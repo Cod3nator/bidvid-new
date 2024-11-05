@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+
 import { useEffect, useState } from "react";
 import {
   ComposedChart,
@@ -145,4 +145,6 @@ const ChartPage=()=> {
 }
 // export default ChartPage;
 
-export default withAuth(ChartPage);
+
+const AuthenticatedStatsPage = withAuth(ChartPage);
+export default AuthenticatedStatsPage;
