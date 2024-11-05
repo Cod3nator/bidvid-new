@@ -146,7 +146,7 @@ const DashboardPage = () => {
                   <th className="py-2 px-4 border-b text-start">Seat</th>
                   <th className="py-2 px-4 border-b text-start">Advertiser</th>
                   <th className="py-2 px-4 border-b text-start">
-                    Intersection Order
+                    Insertion Order
                   </th>
                   <th className="py-2 px-4 border-b text-start">
                     Media Cost D1

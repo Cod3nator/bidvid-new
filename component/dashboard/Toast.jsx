@@ -7,13 +7,13 @@ const Toast = ({ success, message }) => {
     setVisible(false);
   };
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setVisible(false);
-  //   }, 5000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setVisible(false);
+    }, 5000);
 
-  //   return () => clearTimeout(timer); 
-  // }, []);
+    return () => clearTimeout(timer); 
+  }, []);
 
   if (!visible) return null; 
   const toastColor={

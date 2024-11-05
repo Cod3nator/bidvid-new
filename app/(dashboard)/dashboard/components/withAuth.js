@@ -32,10 +32,10 @@ const withAuth = (WrappedComponent) => {
             throw new Error('User not found');
           }
 
-          setLoading(false);  // Set loading to false when the user is authenticated
+          setLoading(false); 
         } catch (error) {
           console.error('Authentication failed', error);
-          router.push('/login');  // Redirect to login on failure
+          router.push('/login'); 
         }
       };
 
