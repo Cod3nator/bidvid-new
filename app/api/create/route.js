@@ -53,19 +53,18 @@ export async function POST(req) {
           token: refreshToken,
         },
       });
-
-      return NextResponse.json(
-        {
-          success: true,
-          message: "User created successfully",
-          sessionToken,
-          refreshToken,
-          user: newUser,
-        },
-        { status: 201 }
-      );
       
     }
+    return NextResponse.json(
+      {
+        success: true,
+        message: "User created successfully",
+        sessionToken,
+        refreshToken,
+        user: newUser,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Error handling request:", error);
 

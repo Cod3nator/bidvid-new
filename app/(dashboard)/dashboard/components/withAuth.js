@@ -4,38 +4,38 @@ import { useEffect, useState } from "react";
 const withAuth = (WrappedComponent) => {
   const ComponentWithAuth = (props) => {
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
       const checkAuth = async () => {
         const token = localStorage.getItem('sessionToken');
 
-        if (!token) {
-          router.push('/login');
-          return;
-        }
+        // if (!token) {
+        //   router.push('/login');
+        //   return;
+        // }
 
-        try {
-          const user = await fetch('/api/dashboard', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          });
+        // try {
+        //   const user = await fetch('/api/dashboard', {
+        //     method: 'GET',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       'Authorization': `Bearer ${token}`
+        //     }
+        //   });
 
-          const data = await user.json();
-          console.log(data);
-          localStorage.setItem('user', JSON.stringify(data.user));
-          if (!data.user) {
-            throw new Error('User not found');
-          }
+        //   const data = await user.json();
+        //   console.log(data);
+        //   localStorage.setItem('user', JSON.stringify(data.user));
+        //   if (!data.user) {
+        //     throw new Error('User not found');
+        //   }
 
-          setLoading(false);
-        } catch (error) {
-          console.error('Authentication failed', error);
-          router.push('/login');
-        }
+        //   setLoading(false);
+        // } catch (error) {
+        //   console.error('Authentication failed', error);
+        //   router.push('/login');
+        // }
       };
 
       checkAuth();
