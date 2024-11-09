@@ -1,19 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const WhatsInside = () => {
 
+  const [currentIndex, setCurrentIndex] = useState(0);
   // useEffect(() => {
   //  const context= document.querySelectorAll(".content-context");
   //  console.log(context);
    
   // },[])
+
   useEffect(() => {
     const pointsContainer = document.querySelector(".points");
     if (!pointsContainer) return;
-  
+
     const points = pointsContainer.querySelectorAll(".point");
     const context = document.querySelectorAll(".content-context");
-  
+
     const handleClick = (point) => {
       showCurrent(point, context);
       points.forEach((p) => {
@@ -27,34 +29,32 @@ const WhatsInside = () => {
         }
       });
     };
-  
+
+    const intervalId = setInterval(() => {
+      const nextIndex = (currentIndex + 1) % points.length; 
+      setCurrentIndex(nextIndex);
+      handleClick(points[nextIndex]);
+    }, 7000); 
     points.forEach((point) => {
       point.addEventListener("click", () => handleClick(point));
-
     });
-  
-    // Cleanup event listeners on unmount
+
     return () => {
+      clearInterval(intervalId);
       points.forEach((point) => {
         point.removeEventListener("click", handleClick);
       });
     };
-  }, []);
+  }, [currentIndex]);
   
-
-   function cardLoop(cards,context){
-    const progressbars = point.querySelectorAll(".progress-bar");
-    progressbars.forEach()
-   }
-
-  function showCurrent(point,cards){
+  function showCurrent(point, cards) {
     const data = point.dataset.card;
-      cards.forEach((card) => {
-        card.classList.remove("active");
-        if (card.dataset.card === data) {   
-          card.classList.add("active");
-        }
-      })    
+    cards.forEach((card) => {
+      card.classList.remove("active");
+      if (card.dataset.card === data) {
+        card.classList.add("active");
+      }
+    });
   }
 
   return (
@@ -141,7 +141,7 @@ const WhatsInside = () => {
             <div className="content">
               <div className="text">
                 <h2>Real-Time Bid Optimization</h2>
-                <p>Plug and play</p>
+                <p></p>
               </div>
               <div className="icon">
                 <img src="/assets/twitter.png" alt="" />
@@ -154,8 +154,8 @@ const WhatsInside = () => {
           <div className="point" data-card="two">
             <div className="content">
               <div className="text">
-                <h2>Real-Time Bid Optimization</h2>
-                <p>Plug and play</p>
+                <h2>Maximize Return on Ad Spend (ROAS)</h2>
+                <p></p>
               </div>
               <div className="icon">
                 <img src="/assets/youtube.png" alt="" />
@@ -168,8 +168,8 @@ const WhatsInside = () => {
           <div className="point" data-card="three">
             <div className="content">
               <div className="text">
-                <h2>Real-Time Bid Optimization</h2>
-                <p>Plug and play</p>
+                <h2>Customization Reporting & Analytics</h2>
+                <p></p>
               </div>
               <div className="icon">
                 <img src="/assets/instagram.png" alt="" />

@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
-
+import {validateName, validateNumber } from "../utils/validationFunction";
 
 const Contact_us = () => {
     
@@ -44,6 +44,7 @@ const Contact_us = () => {
                     name="email"
                     type="email"
                     placeholder="Email Address"
+                    onInput={validateName}
                   />
 
                   <label htmlFor="email">Email Address</label>
@@ -53,6 +54,7 @@ const Contact_us = () => {
                     type="tel"
                     name="phone"
                     placeholder="Phone Number (optional)"
+                    onInput={validateNumber}
                   />
                   <label htmlFor="phone">Phone Number</label>
                 </div>

@@ -21,10 +21,10 @@ const Banner = () => {
                 seamlessly.
               </p>
             </div>
-            <button className="inter-button">
+            <a className="inter-button" href="/contact-us">
               <span>Contact Us</span>
               <Arrow_right />
-            </button>
+            </a>
           </div>
 
           <div className="ratings">
