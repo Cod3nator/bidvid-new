@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-const prisma = new PrismaClient();
+import pool from "../../../lib/db.js"; 
 
 export async function POST(req) {
   try {
-   
     const body = await req.json();
-    const { email } = body;  
+    const { email } = body;
 
     if (!email) {
       return new NextResponse(
@@ -15,9 +13,13 @@ export async function POST(req) {
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: email },
-    });
+    // Check if the user exists in the database
+    const [rows] = await pool.execute(
+      "SELECT * FROM User WHERE email = ?",
+      [email]
+    );
+    
+    const user = rows[0];
 
     if (user) {
       return new NextResponse(
@@ -31,7 +33,7 @@ export async function POST(req) {
       );
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error checking user:", error);
     return new NextResponse(
       JSON.stringify({ message: "An error occurred", success: false }),
       { status: 500 }

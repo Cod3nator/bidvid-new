@@ -45,7 +45,6 @@ const ScrollPage = () => {
     <Navbar/>
       <section className="scroll_page">
         <Banner />
-
         <WhatsInside />
         <Features />
         <Stats />

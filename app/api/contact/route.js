@@ -1,15 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+import pool from "../../lib/db.js";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
     const data = await req.json();
-
-  
     const { name, email, message, phone } = data;
-     
+    
     if (!name || !email) {
       return NextResponse.json(
         { success: false, error: "Name and Email are required." },
@@ -17,17 +14,21 @@ export async function POST(req) {
       );
     }
 
-const phoneString = phone.toString();
-    const response = await prisma.formcontact.create({
-      data: {
-        name,
-        email,
-        message,
-        phone: phoneString,
-      },
-    });
+    const phoneString = phone ? phone.toString() : null;
 
-    return NextResponse.json({ success: true, "message": "Thank You for contacting us" }, { status: 201 });
+    const [result] = await pool.execute(
+      "INSERT INTO Formcontact (name, email, message, phone) VALUES (?, ?, ?, ?)",
+      [name, email, message, phoneString]
+    );
+
+    if (result.affectedRows > 0) {
+      return NextResponse.json(
+        { success: true, message: "Thank you for contacting us" },
+        { status: 201 }
+      );
+    } else {
+      throw new Error("Failed to create contact record");
+    }
   } catch (error) {
     console.error("Error creating contact lead:", error);
     return NextResponse.json(

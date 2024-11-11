@@ -1,13 +1,14 @@
+// Example API route using db.js
+
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import pool from "../../lib/db.js"; 
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION; 
-const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION; 
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION;
+
 export async function POST(req) {
   try {
     const { name, email, password, userId } = await req.json();
@@ -19,52 +20,49 @@ export async function POST(req) {
       );
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email: email },
-    });
+    
+    const [existingUser] = await pool.execute(
+      "SELECT * FROM User WHERE email = ?",
+      [email]
+    );
 
-    if (existingUser) {
+    if (existingUser.length > 0) {
       return NextResponse.json(
-        { error: "User with this email already exists" ,success:false,message: "User with this email already exists" },
+        { error: "User with this email already exists", success: false, message: "User with this email already exists" },
         { status: 400 }
       );
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const newUser = await prisma.user.create({
-        data: {
-          name,
-          email,
-          user_id: userId,
-          password: hashedPassword,
-        },
-      });
+      const [newUserResult] = await pool.execute(
+        "INSERT INTO User (name, email, userId, password) VALUES (?, ?, ?, ?)",
+        [name, email, userId, hashedPassword]
+      );
 
-      const sessionToken = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
+      const newUserId = newUserResult.insertId;
+
+      const sessionToken = jwt.sign({ userId: newUserId }, JWT_SECRET, {
         expiresIn: JWT_EXPIRATION,
       });
-      const refreshToken = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
+      const refreshToken = jwt.sign({ userId: newUserId }, JWT_SECRET, {
         expiresIn: REFRESH_TOKEN_EXPIRATION,
       });
 
-      await prisma.refreshToken.create({
-        data: {
-          userId: newUser.id,
-          token: refreshToken,
+      await pool.execute(
+        "INSERT INTO RefreshToken (userId, token) VALUES (?, ?)",
+        [email, refreshToken]
+      );
+
+      return NextResponse.json(
+        {
+          success: true,
+          message: "User created successfully",
+          sessionToken,
+          refreshToken,
         },
-      });
-      
+        { status: 201 }
+      );
     }
-    return NextResponse.json(
-      {
-        success: true,
-        message: "User created successfully",
-        sessionToken,
-        refreshToken,
-        user: newUser,
-      },
-      { status: 201 }
-    );
   } catch (error) {
     console.error("Error handling request:", error);
 
