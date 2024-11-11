@@ -49,7 +49,7 @@ export async function POST(req) {
   } catch (error) {
     console.error("Error handling request:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
+      { success: false, message: `Internal server error, ${error}` },
       { status: 500 }
     );
   }
