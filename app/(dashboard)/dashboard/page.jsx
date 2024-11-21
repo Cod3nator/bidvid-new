@@ -90,12 +90,12 @@ const DashboardPage = () => {
   return (
     <>
       <Navbar />
-      <div className="p-8 bg-gray-100 h-auto">
+      <div className="p-8 bg-gray-100  h-screen">
         <div className="flex justify-between items-center mt-20 mb-4">
           <div className="text-sm space-x-4 flex ml-4 mb-4">
-            <a href="/list-brands">
+            {/* <a href="/list-brands">
               <button>{"<"} Return to the brands list</button>
-            </a>
+            </a> */}
           </div>
         </div>
         <div
@@ -105,11 +105,12 @@ const DashboardPage = () => {
           <div className="table-header flex justify-between items-center mb-8">
             <div className="table-header-title flex flex-col space-y-2">
               <div className="table-brand-name text-xl font-bold">
-                {brand.name}
+                {/* {brand.name} */}
+                Campaigns
               </div>
-              <span className="table-report-id text-green-400 text-sm">
+              {/* <span className="table-report-id text-green-400 text-sm">
                 Report ID: {brand.reportId}
-              </span>
+              </span> */}
             </div>
           </div>
           <div className="table-wrapper  overflow-x-auto">
