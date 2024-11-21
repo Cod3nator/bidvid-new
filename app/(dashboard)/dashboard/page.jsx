@@ -88,8 +88,8 @@ const DashboardPage = () => {
     }));
   };
   return (
-    <>
-      <Navbar />
+   <div className="h-auto">
+       <Navbar />
       <div className="p-8 bg-gray-100  h-screen">
         <div className="flex justify-between items-center mt-20 mb-4">
           <div className="text-sm space-x-4 flex ml-4 mb-4">
@@ -392,7 +392,7 @@ const DashboardPage = () => {
           border-bottom: none;
         }
       `}</style>
-    </>
+   </div>
   );
 };
 
