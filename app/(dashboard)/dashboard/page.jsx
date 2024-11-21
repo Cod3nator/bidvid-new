@@ -1,169 +1,396 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Navbar from "./components/Dash_Navbar";
-import withAuth from "./components/withAuth";
-import { Image, ServerCog, TvMinimalPlay, SquarePlus } from "lucide-react";
-
+import Navbar from "../components/Dash_Navbar";
+import withAuth from "../components/withAuth";
+import Pagination from "../components/pagination";
+const brand = {
+  name: "Brand Name",
+  reportId: "123456789",
+};
 const dummyData = [
   {
-    DSP: "AdPlatform A",
-    seat: "Seat 1",
-    advertiser: "Advertiser X",
-    intersection_order: "Order 001",
-    media_cost_d1: 1500,
-    fit_score: 85,
-    bidvid_status: "Active",
+    fitScore: "85%",
+    impressions: "150,000",
+    cpm: "$12.50",
+    reach: "80,000",
+    frequency: "2.5",
+    ctrVtr: "1.5%",
+    completionRate: "75%",
+    location: "United States",
+    conversion: "5%",
+    campaignData: "Campaign A",
+    clicks: "500",
+    date: "2024-11-18",
+    range: "Last 7 Days",
+    dailyReport: "Report Link",
+    costPerReach: "$0.15",
   },
   {
-    DSP: "AdPlatform B",
-    seat: "Seat 2",
-    advertiser: "Advertiser Y",
-    intersection_order: "Order 002",
-    media_cost_d1: 2000,
-    fit_score: 90,
-    bidvid_status: "Paused",
-  },
-  {
-    DSP: "AdPlatform C",
-    seat: "Seat 3",
-    advertiser: "Advertiser Z",
-    intersection_order: "Order 003",
-    media_cost_d1: 2500,
-    fit_score: 75,
-    bidvid_status: "Inactive",
-  },
-  {
-    DSP: "AdPlatform A",
-    seat: "Seat 4",
-    advertiser: "Advertiser X",
-    intersection_order: "Order 004",
-    media_cost_d1: 3000,
-    fit_score: 80,
-    bidvid_status: "Active",
-  },
-  {
-    DSP: "AdPlatform B",
-    seat: "Seat 5",
-    advertiser: "Advertiser Y",
-    intersection_order: "Order 005",
-    media_cost_d1: 3500,
-    fit_score: 95,
-    bidvid_status: "Paused",
-  },
-  {
-    DSP: "AdPlatform C",
-    seat: "Seat 6",
-    advertiser: "Advertiser Z",
-    intersection_order: "Order 006",
-    media_cost_d1: 4000,
-    fit_score: 70,
-    bidvid_status: "Inactive",
+    fitScore: "85%",
+    impressions: "150,000",
+    cpm: "$12.50",
+    reach: "80,000",
+    frequency: "2.5",
+    ctrVtr: "1.5%",
+    completionRate: "75%",
+    location: "United States",
+    conversion: "5%",
+    campaignData: "Campaign A",
+    clicks: "500",
+    date: "2024-11-18",
+    range: "Last 7 Days",
+    dailyReport: "Report Link",
+    costPerReach: "$0.15",
   },
 ];
 
 const DashboardPage = () => {
+  const [campaignData, setCampaignData] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetch("https://devapi.bidvid.in/campaign_reports");
+        const res = await data.json();
+        console.log(res);
+        setCampaignData(res);
+      } catch (error) {
+        console.error("Error fetching campaign reports:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  const [headers, setHeaders] = useState();
+
+  useEffect(() => {
+    if (campaignData) {
+      const keys = Object.keys(campaignData[0]);
+      console.log(keys);
+      setHeaders(
+        keys.map((key) =>
+          key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+        )
+      );
+    }
+  }, [campaignData]);
+
+  const [dropdownOpen, setDropdownOpen] = useState({
+    fitScore: false,
+    location: false,
+    date: false,
+  });
+
+  const toggleDropdown = (key) => {
+    setDropdownOpen((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
   return (
     <>
       <Navbar />
-      <div className="p-4">
+      <div className="p-8 bg-gray-100 h-auto">
         <div className="flex justify-between items-center mt-20 mb-4">
-          <div className="flex space-x-4 items-center">
-            <div className="search-filter">
-              <div className="relative flex items-center h-12 border rounded-lg focus-within:shadow-lg bg-white overflow-hidden w-96">
-                <div className="grid place-items-center h-full w-12 text-gray-300">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
-                  type="text"
-                  id="search"
-                  placeholder="Search"
-                />
-              </div>
-            </div>
-            <button className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-filter"
-              >
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-              </svg>
-            </button>
-            <div className="text-gray-700">
-              <span className="mr-4">Filtered Items</span>
-              <span>My Items</span>
-            </div>
-          </div>
-          <div className="w-48">
-            <h2 className="text-lg font-semibold mb-2">Usage Progress(%)</h2>
-            <div className="h-2 bg-gray-200">
-              <div
-                className="h-full bg-gray-600"
-                style={{ width: "70%" }}
-              ></div>
-            </div>
+          <div className="text-sm space-x-4 flex ml-4 mb-4">
+            <a href="/list-brands">
+              <button>{"<"} Return to the brands list</button>
+            </a>
           </div>
         </div>
+        <div
+          className="table-container bg-white p-8 rounded-lg"
+          style={{ borderRadius: "24px" }}
+        >
+          <div className="table-header flex justify-between items-center mb-8">
+            <div className="table-header-title flex flex-col space-y-2">
+              <div className="table-brand-name text-xl font-bold">
+                {brand.name}
+              </div>
+              <span className="table-report-id text-green-400 text-sm">
+                Report ID: {brand.reportId}
+              </span>
+            </div>
+          </div>
+          <div className="table-wrapper  overflow-x-auto">
+            <table
+              className="min-w-full bg-white border-gray-100 rounded "
+              style={{
+                borderSpacing: "30px",
+                whiteSpace: "nowrap", // Prevents wrapping
+              }}
+            >
+              <thead>
+                {/* <tr className="bg-white text-gray-400 font-regular">
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium relative"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Fit Score
+                    <div className="relative inline-block text-left">
+                      <button
+                        type="button"
+                        onClick={() => toggleDropdown("fitScore")}
+                        className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        ▼
+                      </button>
+                      {dropdownOpen.fitScore && (
+                        <div className="absolute z-10 mt-2 w-36 bg-white shadow-lg border rounded-md">
+                          <ul className="py-1 text-sm text-gray-700">
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              High
+                            </li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Medium
+                            </li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Low
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </th>
 
-        <table className="min-w-full bg-white border-gray-100">
-          <thead>
-            <tr className="bg-gray-000 text-gray-600">
-              <th className="py-2 px-4 border-b text-start">DSP</th>
-              <th className="py-2 px-4 border-b text-start">Seat</th>
-              <th className="py-2 px-4 border-b text-start">Advertiser</th>
-              <th className="py-2 px-4 border-b text-start">Insertion Order</th>
-              <th className="py-2 px-4 border-b text-start">Media Cost D1</th>
-              <th className="py-2 px-4 border-b text-start">Fit Score</th>
-              <th className="py-2 px-4 border-b text-start">BidVid Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dummyData.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-100">
-                <td className="py-3 px-4">
-                  <Image />
-                </td>
-                <td className="py-3 px-4">{item.seat}</td>
-                <td className="py-3 px-4">{item.advertiser}</td>
-                <td className="py-3 px-4">{item.intersection_order}</td>
-                <td className="py-3 px-4">${item.media_cost_d1}</td>
-                <td className="py-3 px-4">{item.fit_score}</td>
-                <td className="py-3 px-4">
-                  {item.bidvid_status === "Paused" ? (
-                    <ServerCog />
-                  ) : item.bidvid_status === "Active" ? (
-                    <TvMinimalPlay />
-                  ) : (
-                    <SquarePlus />
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Impressions
+                  </th>
+
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    CPM
+                  </th>
+
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Reach
+                  </th>
+                   <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Frequency
+                  </th>
+                    <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    CTR / VTR
+                  </th>
+
+  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Completion Rate
+                  </th>
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium relative"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Location
+                    <div className="relative inline-block text-left">
+                      <button
+                        type="button"
+                        onClick={() => toggleDropdown("location")}
+                        className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        ▼
+                      </button>
+                      {dropdownOpen.location && (
+                        <div className="absolute z-10 mt-2 w-36 bg-white shadow-lg border rounded-md">
+                          <ul className="py-1 text-sm text-gray-700">
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              USA
+                            </li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Europe
+                            </li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Asia
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </th>
+
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Conversion
+                  </th>
+  
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Campaign wise data
+                  </th>
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Click
+                  </th>
+                
+
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium relative"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Date
+                    <div className="relative inline-block text-left">
+                      <button
+                        type="button"
+                        onClick={() => toggleDropdown("date")}
+                        className="ml-2 bg-white border border-gray-300 rounded-md shadow-sm px-2 py-1 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        ▼
+                      </button>
+                      {dropdownOpen.date && (
+                        <div className="absolute z-10 mt-2 w-36 bg-white shadow-lg border rounded-md">
+                          <ul className="py-1 text-sm text-gray-700">
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Today
+                            </li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Last Week
+                            </li>
+                            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                              Last Month
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </th>
+
+               
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Range
+                  </th>
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Specific Daily Report
+                  </th>
+                  <th
+                    className="py-2 border-b text-start text-sm font-medium"
+                    style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                  >
+                    Cost Per Reach
+                  </th>
+                </tr> */}
+                <tr className="bg-white text-gray-400 font-regular">
+                  {headers &&
+                    headers.map((header, index) => (
+                      <th
+                        key={index}
+                        className="py-2 border-b text-start text-sm font-medium"
+                        style={{ paddingLeft: "14px", paddingRight: "54px" }}
+                      >
+                        {header}
+                      </th>
+                    ))}
+                </tr>
+              </thead>
+              <tbody>
+                {campaignData &&
+                  campaignData.map((item, index) => (
+                    <tr key={index} className="hover:bg-gray-100">
+                      <td className="py-6 px-4 text-sm">{item.id}</td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.campaign_name}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.insertion_order}
+                      </td>
+                      <td className="py-6 px-4 text-sm">{item.line_item}</td>
+                      <td className="py-6 px-4 text-sm">{item.campaign_id}</td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.insertion_order_id}
+                      </td>
+                      <td className="py-6 px-4 text-sm">{item.line_item_id}</td>
+                      <td className="py-6 px-4 text-sm">{item.Impressions}</td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.cpm_fee_one_usd}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.click_rate_ctr}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.completion_rate_audio}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.completion_rate_video}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.complete_listens_audio}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.complete_views_video}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.total_conversions}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.post_view_conversions}
+                      </td>
+                      <td className="py-6 px-4 text-sm">
+                        {item.post_click_conversions}
+                      </td>
+                      <td className="py-6 px-4 text-sm">{item.clicks}</td>
+                      <td className="py-6 px-4 text-sm">{item.created_at}</td>
+                      <td className="py-6 px-4 text-sm">{item.updated_at}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          {/* <div className="pagination flex justify-between mt-8">
+            <div></div>
+            <div className="text-sm flex items-center space-x-4">
+              <span className="whitespace-nowrap">
+                Showing data 1 to 8 of 256k entries
+              </span>
+              <Pagination />
+            </div>
+          </div> */}
+        </div>
       </div>
+      <style jsx>{`
+        .table-wrapper::-webkit-scrollbar {
+          margin-top: 14px;
+          height: 6px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+          background-color: #888;
+          border-radius: 4px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+          background-color: #f1f1f1;
+        }
+        table tr {
+          border-bottom: 1px solid #ccc;
+        }
+        table tr:nth-last-child(1) {
+          border-bottom: none;
+        }
+      `}</style>
     </>
   );
 };
@@ -171,3 +398,11 @@ const DashboardPage = () => {
 const AuthenticatedDashboardPage = withAuth(DashboardPage);
 
 export default AuthenticatedDashboardPage;
+{
+  /* <div className="my-4" style={{
+                    height: "1px",
+                    width: "100% !important",
+                    backgroundColor: "gray",
+                    border: "none",
+                  }}></div> */
+}

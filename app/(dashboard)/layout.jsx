@@ -1,4 +1,4 @@
-import Navbar from "./dashboard/components/Dash_Navbar";
+import Navbar from "./components/Dash_Navbar";
 
 
 export const metadata = {

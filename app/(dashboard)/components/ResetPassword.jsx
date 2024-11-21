@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Toast from "../../../../component/dashboard/Toast";
+import Toast from "../../../component/dashboard/Toast";
 
 const ResetPasswordForm = () => {
   const router = useRouter();

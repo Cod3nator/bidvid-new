@@ -26,15 +26,6 @@ model RefreshToken {
   user User @relation(fields: [userId], references: [id]) 
 }
 
-model Contact{
-  id  Int @id @default(autoincrement())
-  name String
-  email String?
-  message String?
-  phone    String?
-  
-  createdAt DateTime @default(now()) 
-}
 model Formcontact{
   id  Int @id @default(autoincrement())
   name String

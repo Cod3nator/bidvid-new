@@ -14,8 +14,8 @@ import {
   Scatter,
   ResponsiveContainer,
 } from "recharts";
-import Navbar from "../dashboard/components/Dash_Navbar";
-import withAuth from "../dashboard/components/withAuth";
+import Navbar from "../components/Dash_Navbar";
+import withAuth from "../components/withAuth";
 
 // Example data
 const data = [

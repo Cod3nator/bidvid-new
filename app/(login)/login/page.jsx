@@ -28,42 +28,44 @@ const Page = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
- 
-    try{
+    router.push("/dashboard");
 
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // setLoading(true);
+    // setError(null);
+ 
+    // try{
+
+    //   const res = await fetch("/api/login", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
   
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Login-in failed'); 
-      }
-      localStorage.setItem('sessionToken', data.sessionToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      setToastSuccess(true); 
-      setToastMessage("Login successful");
-      setTimeout(() => {
-        setToastSuccess(null); 
-        router.push("/dashboard");
-      }, 500);
-    }catch (error) {
-      setError(error.message);
-      setToastSuccess(false);  
-      setToastMessage(error.message || "Login failed");
-      setTimeout(() => {
-        setToastSuccess(null);  
-      }, 5000);
-      console.error("Login failed:", error.message);
-    }finally{
-      setLoading(false); 
-    }
+    //   const data = await res.json();
+    //   if (!res.ok) {
+    //     throw new Error(data.error || 'Login-in failed'); 
+    //   }
+    //   localStorage.setItem('sessionToken', data.sessionToken);
+    //   localStorage.setItem('refreshToken', data.refreshToken);
+    //   setToastSuccess(true); 
+    //   setToastMessage("Login successful");
+    //   setTimeout(() => {
+    //     setToastSuccess(null); 
+    //     router.push("/dashboard");
+    //   }, 500);
+    // }catch (error) {
+    //   setError(error.message);
+    //   setToastSuccess(false);  
+    //   setToastMessage(error.message || "Login failed");
+    //   setTimeout(() => {
+    //     setToastSuccess(null);  
+    //   }, 5000);
+    //   console.error("Login failed:", error.message);
+    // }finally{
+    //   setLoading(false); 
+    // }
   };
 
   const handleForgotPassword = () => {
@@ -122,7 +124,7 @@ const Page = () => {
                   <input
                     type="text"
                     name="email"
-                    placeholder="User ID"
+                    placeholder="Email ID"
                     value={formData.userId}
                     onChange={handleChange}
                     className=" p-2 w-full"

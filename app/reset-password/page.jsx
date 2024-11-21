@@ -1,7 +1,7 @@
 "use client";
 import {Suspense } from "react";
 
-import ResetPasswordForm from "../(dashboard)/dashboard/components/ResetPassword";
+import ResetPasswordForm from "../(dashboard)/components/ResetPassword";
 
 const ResetPassword = () => {
   return (
