@@ -158,12 +158,12 @@ const Page = () => {
             </p>
 
             <div className="flex items-center justify-between mt-6">
-              <span>
+              {/* <span>
                 Don't have an account?{" "}
                 <a href="/create-account" className="text-blue-600">
                   Sign Up
                 </a>
-              </span>
+              </span> */}
             </div>
           </div>
         </div>
