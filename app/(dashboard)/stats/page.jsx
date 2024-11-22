@@ -15,7 +15,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Navbar from "../components/Dash_Navbar";
-import withAuth from "../components/withAuth";
 
 // Example data
 const data = [
@@ -145,6 +144,4 @@ const ChartPage=()=> {
 }
 // export default ChartPage;
 
-
-const AuthenticatedStatsPage = withAuth(ChartPage);
-export default AuthenticatedStatsPage;
+export default ChartPage;

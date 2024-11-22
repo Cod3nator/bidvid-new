@@ -8,11 +8,11 @@ export const metadata = {
   
   export default function DashboardLayout({ children }) {
     return (
-      <>
-      <div className="login-layout">
+     
+      <div className="dash-layout" style={{height:"100%", width:"100%"}}>
         {children}
       </div>
-      </>
+   
     );
   }
   
