@@ -22,7 +22,7 @@ const ClientDashboard = ({campaignData, headers}) => {
         }));
       };
   return (
-    <div className="bg-red-100" style={{ height: "100%" }}>
+    <div className="bg-gray-100" style={{ height: "100%" }}>
     <Navbar />
    <div className="p-8 ">
      <div className="flex justify-between items-center mt-20 mb-4">
