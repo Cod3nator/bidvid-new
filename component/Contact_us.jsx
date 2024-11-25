@@ -143,7 +143,7 @@ const Contact_us = () => {
           <div className="contact-add">
             <h5>Email Address</h5>
             <div className="line"></div>
-            <a href="mailto:help@info.com">help@info.com</a>
+            <a href="mailto:support@bidvid.in	">support@bidvid.in	</a>
             <div className="details">
               <span>Assistance hours:</span>
               <p>Monday - Friday 6 am to 8 pm EST</p>
@@ -152,7 +152,7 @@ const Contact_us = () => {
           <div className="contact-add">
             <h5>Number</h5>
             <div className="line"></div>
-            <a href="tel:+91 7447835979">(7447) 999-9983</a>
+            <a href="tel:+91 9930451078">(9930) 451-078</a>
             <div className="details">
               <span>Assistance hours:</span>
               <p>Monday - Friday 6 am to 8 pm EST</p>
