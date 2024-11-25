@@ -395,6 +395,7 @@ h1 {
 
   h1 {
     font-size: 35px;
+    width: 100%;
   }
 
   .banner-text-btn button {
@@ -432,26 +433,7 @@ h1 {
     background-color: transparent; */
   }
 }
-@media (max-width: 515px){
-  h1{
-    font-size: 32px;
-  }
-}
-@media (max-width: 468px){
-  h1{
-    font-size: 28px;
-  }
-}
-/* @media (max-width: 420px){
-  h1{
-    font-size: 24px;
-  }
-}
-@media (max-width: 360px){
-  h1{
-    font-size: 20px;
-  }
-} */
+
 .whats-inside {
   padding: 60px 0;
   width: 100%;
@@ -492,6 +474,7 @@ h1 {
   flex-direction: column;
   height: 100%;
   width: 100%;
+  margin-top: 8px;
 }
 .time-content .content-area h3 {
   font-size: 24px;
@@ -512,6 +495,8 @@ h1 {
   font-size: 14px;
   padding-bottom: 15px;
   color: #fff;
+  display: flex; 
+  gap: 10px;
 }
 
 .points {
@@ -626,10 +611,16 @@ h1 {
     width: 100%;
   }
 }
+
+.points-mobile{
+  display: none;
+}
+
+
 @media (max-width: 768px) {
   .whats-inside {
     padding: 60px 0;
-
+     padding-bottom: 0px;
     max-height: 100%;
     height: 100%;
   }
@@ -638,7 +629,7 @@ h1 {
     flex-direction: column;
     height: 100%;
     min-height: max-content;
-    gap: 40px;
+    gap: 0px;
     padding: 24px;
   }
 
@@ -675,7 +666,10 @@ h1 {
     color: #fff;
   }
 
-  .points {
+  .points{
+    display: none;
+  }
+  /* .points {
     height: max-content;
     width: 100%;
     display: flex;
@@ -729,7 +723,7 @@ h1 {
   width: 100%;
   height: 5px;
   transition: background-color 0.25s;
-}
+} */
   /* 
 .progress-bar.active {
   background-color: #ccc;
@@ -780,6 +774,40 @@ h1 {
     width: 100%;
   }
 } */
+/* Mobile Styles */
+.points-mobile {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 20px;
+  margin-top: 8px;
+}
+
+.point-bars {
+  width: 70px;
+  height: 4px;
+  border-radius: 24px;
+  background-color: var(--grey);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.point-bars .progress {
+  width: 0%;
+  height: 100%;
+  background-color: var(--blue);
+  transition: width 7s forwards;
+}
+
+.point-bars.active .progress {
+  width: 100%;
+  background-color: var(--blue);
+}
+
+
 }
 
 .bento {
@@ -1550,6 +1578,7 @@ textarea::placeholder {
   align-items: center;
   width: 100%;
   flex-shrink: 0;
+  text-align: start;
 }
 
 .question-style {
@@ -1583,7 +1612,7 @@ textarea::placeholder {
 }
 
 .answer-divider {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid transparent;
   padding-top: 10px;
 }
 

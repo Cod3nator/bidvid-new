@@ -1,56 +1,65 @@
 import React, { useEffect, useState } from "react";
-
+import { Check } from 'lucide-react';
 const WhatsInside = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
- 
+
+  const updateContent = (index) => {
+    const points = document.querySelectorAll(".points .point");
+    const cards = document.querySelectorAll(".content-context");
+    const mobileBars = document.querySelectorAll(".points-mobile .point-bars");
+
+    points.forEach((point, i) => {
+      point.classList.toggle("active", i === index);
+      const pb = point.querySelector(".progress-bar");
+      const pr = point.querySelector(".progress-bar .progress");
+      pb?.classList.toggle("active", i === index);
+      pr?.classList.toggle("active", i === index);
+    });
+
+    cards.forEach((card, i) => {
+      card.classList.toggle("active", i === index);
+    });
+
+    mobileBars.forEach((bar, i) => {
+      bar.classList.toggle("active", i === index);
+    });
+
+    setCurrentIndex(index);
+  };
 
   useEffect(() => {
-    const pointsContainer = document.querySelector(".points");
-    if (!pointsContainer) return;
-  
-    const points = pointsContainer.querySelectorAll(".point");
-    const context = document.querySelectorAll(".content-context");
-  
-    const handleClick = (point) => {
-      showCurrent(point, context);
-      points.forEach((p) => {
-        const pb = p.querySelector(".progress-bar");
-        const pr = p.querySelector(".progress-bar .progress");
-        pb.classList.remove("active");
-        pr.classList.remove("active");
-        if (p === point) {
-          pb.classList.add("active");
-          pr.classList.add("active");
-        }
-      });
-    };
-  
     const intervalId = setInterval(() => {
-      const nextIndex = (currentIndex + 1) % points.length; 
-      setCurrentIndex(nextIndex);
-      handleClick(points[nextIndex]);
-    }, 7000); 
-    points.forEach((point) => {
-      point.addEventListener("click", () => handleClick(point));
-    });
-  
-    return () => {
-      clearInterval(intervalId);
-      points.forEach((point) => {
-        point.removeEventListener("click", handleClick);
-      });
-    };
+      const nextIndex = (currentIndex + 1) % 3; // Cycle through 3 items
+      updateContent(nextIndex);
+    }, 7000);
+
+    return () => clearInterval(intervalId);
   }, [currentIndex]);
-  
-  function showCurrent(point, cards) {
-    const data = point.dataset.card;
-    cards.forEach((card) => {
-      card.classList.remove("active");
-      if (card.dataset.card === data) {
-        card.classList.add("active");
-      }
+
+  useEffect(() => {
+    const points = document.querySelectorAll(".points .point");
+    const mobileBars = document.querySelectorAll(".points-mobile .point-bars");
+
+    const handleClick = (index) => {
+      updateContent(index);
+    };
+
+    points.forEach((point, index) => {
+      point.addEventListener("click", () => handleClick(index));
     });
-  }       
+
+    mobileBars.forEach((bar, index) => {
+      bar.addEventListener("click", () => handleClick(index));
+    });
+
+    return () => {
+      points.forEach((point) => point.removeEventListener("click", handleClick));
+      mobileBars.forEach((bar) =>
+        bar.removeEventListener("click", handleClick)
+      );
+    };
+  }, []);
+  
   
   return (
     <div className="whats-inside container">
@@ -71,10 +80,10 @@ const WhatsInside = () => {
                 ensures the highest possible yield from every ad impression.
               </p>
               <ul>
-              <li>Dynamic adjustment of auction parameters</li>
-                <li>Real-time analysis of user behavior and market conditions</li>
-                <li>Seamless integration with your existing ad tech stack</li>
-                <li>How to get Airtable base to JSON</li>
+              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Dynamic adjustment of auction parameters</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Real-time analysis of user behavior and market conditions</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Seamless integration with your existing ad tech stack</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />How to get Airtable base to JSON</li>
               </ul>
             </div>
           </div>
@@ -93,10 +102,10 @@ const WhatsInside = () => {
                 ensures the highest possible yield from every ad impression.
               </p>
               <ul>
-                <li>Dynamic adjustment of auction parameters</li>
-                <li>Real-time analysis of user behavior and market conditions</li>
-                <li>Seamless integration with your existing ad tech stack</li>
-                <li>How to get Airtable base to JSON</li>
+              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Dynamic adjustment of auction parameters</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Real-time analysis of user behavior and market conditions</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Seamless integration with your existing ad tech stack</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />How to get Airtable base to JSON</li>
               </ul>
             </div>
           </div>
@@ -115,10 +124,10 @@ const WhatsInside = () => {
                 ensures the highest possible yield from every ad impression.
               </p>
               <ul>
-                <li>Dynamic adjustment of auction parameters</li>
-                <li>Real-time analysis of user behavior and market conditions</li>
-                <li>Seamless integration with your existing ad tech stack</li>
-                <li>How to get Airtable base to JSON</li>
+              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Dynamic adjustment of auction parameters</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Real-time analysis of user behavior and market conditions</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Seamless integration with your existing ad tech stack</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />How to get Airtable base to JSON</li>
               </ul>
             </div>
           </div>
@@ -174,6 +183,17 @@ const WhatsInside = () => {
               <div className="progress"></div>
             </div>
           </div>
+        </div>
+        <div className="points-mobile">
+          <div className="point-bars active">
+          <div className="progress active"></div>
+          </div>
+          <div className="point-bars">
+          <div className="progress"></div>
+            </div>
+            <div className="point-bars">
+            <div className="progress"></div>
+            </div>
         </div>
       </div>
     </div>

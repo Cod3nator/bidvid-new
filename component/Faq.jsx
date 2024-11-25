@@ -8,7 +8,7 @@ const faqData = [
   },
   {
     question: "How can I contact customer support?",
-    answer: "You can reach us via email at [email address], or call us at [phone number]."
+    answer: "You can reach us via email at support@bidvid.in, or call us at (9930) 451-078."
   },
   {
     question: "What is your return policy?",
@@ -28,7 +28,7 @@ const faqData = [
   }
 ];
 
-const Faq = () => {
+const  Faq = () => {
   const [activeIndex, setActiveIndex] = useState(0); 
 
   const toggleAccordion = (index) => {
