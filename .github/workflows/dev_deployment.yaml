@@ -22,4 +22,5 @@ jobs:
         run: npm i --force
 
       - name: Build application
-        run: CI=false npm run build && cp -R ./.github/ root@tekwise:/var/www/html/app.bidvid/
+        run: CI=false npm run build && scp -r ./.github/ root@tekwise:/var/www/html/app.bidvid/
+
