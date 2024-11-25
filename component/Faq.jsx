@@ -29,10 +29,10 @@ const faqData = [
 ];
 
 const Faq = () => {
-  const [activeIndex, setActiveIndex] = useState(null); // to track which FAQ is open
+  const [activeIndex, setActiveIndex] = useState(0); 
 
   const toggleAccordion = (index) => {
-    setActiveIndex(activeIndex === index ? null : index); // close if open, open if closed
+    setActiveIndex(activeIndex === index ? null : index); 
   };
 
   return (

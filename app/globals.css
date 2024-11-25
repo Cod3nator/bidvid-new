@@ -8,6 +8,8 @@
 --grey:#CDD0D6;
  --blue: #5ED9FF;
   --black: #101010;
+--gray-text:rgb(255, 255, 255,50%);
+--white-text:rgb(255, 255, 255,100%);
 }
 
 
@@ -19,11 +21,12 @@
 }
 html{
   height: 100%;
-  width: 100%;
+  width: 100%; 
 }
 body {
   color: var(--foreground);
   background: var(--background);
+ 
   font-family: "Inter", sans-serif;
   font-size: 16px;
 
@@ -164,51 +167,100 @@ footer {
 .banner {
   background-color: var(--black);
   width: 100%;
-
   height:auto;
   display: flex;
   justify-content: center;
   align-items: start;
-
   height: 80vh;
 }
 .banner-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* gap: 24px; */
   width: 100%;
   height: 100%;
   overflow: hidden;
-  margin-left:100px ;
+  margin-top: 50px;
   max-width: 1320px;
 }
 .banner-content {
-  margin-top: 264px;
-  width: 70%;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
-  margin-top: 108px;
+  align-items: center;
 }
 .banner-text-btn {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 52px;
 }
 .banner-text {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 16px;
 }
+.text-swap {
+  position: relative;
+  max-width: 330px;
+  width: 100%;
+  text-align: start;
+
+  z-index: 50;
+  font-size: 20px;
+}
+
+.text-swap .text-content {
+  position: absolute;
+  z-index: 10;
+  font-size: 1.2rem;
+  font-weight: bold;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  text-indent: 34px;
+  transform: translate(-50%, -50%);
+  color: var(--gray-text); 
+}
+
+.text-swap img {
+  position: relative;
+  width: 100%;
+  z-index: 0; 
+}
+
+.swapped-text {
+  text-indent: 2px;
+  display: inline-block;
+   color: var(--white-text);
+}
+.animate-up{
+  animation: rotate-text 1s cubic-bezier(0.075, 0.82, 0.165, 1) ;  
+}
+@keyframes rotate-text {
+  from {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
 .banner-text p {
+  text-align: center;
   font-size: 16px;
   color: #fff;
-  padding-right: 180px;
+  max-width: 58%;
 }
 .banner-heading {
   gap: 24px;
+  text-align: center;
 }
 
 h1 {
@@ -243,6 +295,21 @@ h1 {
   align-items: center;
   gap: 16px;
   background-color: var(--blue);
+  cursor: pointer;
+}
+.inter-button svg {
+  transition: transform 0.2s ease; 
+}
+.inter-button img {
+  transition: transform 0.5s ease;
+}
+
+.inter-button:hover img {
+  transform: translateX(8px);
+}
+
+.inter-button:hover svg {
+  transform: translateX(8px);
 }
 .banner-text-btn button {
   background-color: var(--blue);
@@ -261,8 +328,10 @@ h1 {
   align-items: center;
   margin-top: 80px;
   gap: 80px;
+
 }
 .ratings p {
+  margin-top:14px ;
   color: #fff;
 }
 .rating {
@@ -276,27 +345,16 @@ h1 {
   display: flex;
 }
 
-.banner-img{
-  /* margin-top: 184px; */
-  /* background-color: red; */
-  height: 100%;
-  display: flex;
-  align-items: end;
-}
+
 @media (max-width: 768px) {
   .banner {
-    /* width: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: start; */
     flex-direction: column;
     height: 100%;
     margin-top: 40px;
   }
 .banner-wrapper{
   flex-direction: column-reverse;
-  margin: 0;
+  margin-top: 60px;
   padding: 0px 24px;
 }
   .banner-content {
@@ -307,7 +365,6 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* margin-top: 108px; */
   }
   .banner-text-btn {
     display: flex;
@@ -319,20 +376,17 @@ h1 {
   .banner-text {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    text-align: left;
+    /* justify-content: center;
+    align-items: center; */
+    text-align: center;
     gap: 16px;
   }
-  .banner-img{
-    margin-top: 24px;
-  }
+ 
   .gradient-title {
     width: min-content;
   }
   .banner-text p {
-    /* font-size: 16px;
-    color: #fff; */
+    max-width: 85%;
     padding-right: 0px;
   }
   .banner-heading {
@@ -378,64 +432,26 @@ h1 {
     background-color: transparent; */
   }
 }
-.column {
-  display: none;
-  width: 174px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  overflow: visible;
-  position: relative;
-}
-.column_1 {
-  position: absolute;
-  overflow: hidden;
-  gap: 12px;
-}
-.icons {
-  animation: translateYAnimation 60s infinite linear;
-}
-.icons img {
-  padding: 24px;
-  background-color: black;
-}
-.column_2 {
-  .icons {
-    animation: down 60s infinite linear;
+@media (max-width: 515px){
+  h1{
+    font-size: 32px;
   }
 }
-@keyframes translateYAnimation {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-100%);
+@media (max-width: 468px){
+  h1{
+    font-size: 28px;
   }
 }
-@keyframes down {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(100%);
+/* @media (max-width: 420px){
+  h1{
+    font-size: 24px;
   }
 }
-
-@keyframes go {
-  to {
-    inset-inline-start: calc(var(--marquee-item-width) * -1);
+@media (max-width: 360px){
+  h1{
+    font-size: 20px;
   }
-}
-.white {
-  background-color: white !important;
-  border-radius: 60%;
-}
-.column img {
-  width: 150px;
-}
-
+} */
 .whats-inside {
   padding: 60px 0;
   width: 100%;
@@ -555,7 +571,7 @@ h1 {
 }
 
 .progress-bar {
-  display: none;
+  display: flex;
   width: 100%;
   height: 5px;
   background-color: transparent;
@@ -570,11 +586,10 @@ h1 {
   height: inherit;
   width: 0%;
   background-color: var(--blue);
-  /* This will not work with 0s */
 }
 
 .progress-bar .progress.active {
-  animation: grow 7s linear;
+  animation: grow 8s forwards;
 }
 
 @keyframes grow {

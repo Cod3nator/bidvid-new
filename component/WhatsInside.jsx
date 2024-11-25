@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 const WhatsInside = () => {
-
   const [currentIndex, setCurrentIndex] = useState(0);
-  // useEffect(() => {
-  //  const context= document.querySelectorAll(".content-context");
-  //  console.log(context);
-   
-  // },[])
+ 
 
   useEffect(() => {
     const pointsContainer = document.querySelector(".points");
     if (!pointsContainer) return;
-
+  
     const points = pointsContainer.querySelectorAll(".point");
     const context = document.querySelectorAll(".content-context");
-
+  
     const handleClick = (point) => {
       showCurrent(point, context);
       points.forEach((p) => {
@@ -29,7 +24,7 @@ const WhatsInside = () => {
         }
       });
     };
-
+  
     const intervalId = setInterval(() => {
       const nextIndex = (currentIndex + 1) % points.length; 
       setCurrentIndex(nextIndex);
@@ -38,7 +33,7 @@ const WhatsInside = () => {
     points.forEach((point) => {
       point.addEventListener("click", () => handleClick(point));
     });
-
+  
     return () => {
       clearInterval(intervalId);
       points.forEach((point) => {
@@ -55,8 +50,8 @@ const WhatsInside = () => {
         card.classList.add("active");
       }
     });
-  }
-
+  }       
+  
   return (
     <div className="whats-inside container">
       <div className="time-content">
@@ -144,11 +139,11 @@ const WhatsInside = () => {
                 <p></p>
               </div>
               <div className="icon">
-                <img src="/assets/twitter.png" alt="" />
+                {/* <img src="/assets/twitter.png" alt="" /> */}
               </div>
             </div>
-            <div className="progress-bar">
-              <div className="progress"></div>
+            <div className="progress-bar active">
+              <div className="progress active"></div>
             </div>
           </div>
           <div className="point" data-card="two">
@@ -158,7 +153,7 @@ const WhatsInside = () => {
                 <p></p>
               </div>
               <div className="icon">
-                <img src="/assets/youtube.png" alt="" />
+                {/* <img src="/assets/youtube.png" alt="" /> */}
               </div>
             </div>
             <div className="progress-bar">
@@ -172,7 +167,7 @@ const WhatsInside = () => {
                 <p></p>
               </div>
               <div className="icon">
-                <img src="/assets/instagram.png" alt="" />
+                {/* <img src="/assets/instagram.png" alt="" /> */}
               </div>
             </div>
             <div className="progress-bar">
@@ -186,3 +181,5 @@ const WhatsInside = () => {
 };
 
 export default WhatsInside;
+
+

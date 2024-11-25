@@ -1,6 +1,7 @@
 import React from "react";
 import Star_row from "./star_row";
 import Arrow_right from "./Arrow_right";
+import TextSwap from "./TextSwap";
 
 const Banner = () => {
   
@@ -10,6 +11,7 @@ const Banner = () => {
         <div className="banner-content">
           <div className="banner-text-btn">
             <div className="banner-text">
+              <TextSwap/>
               <div className="banner-heading">
                 <h1 className="grey-text">Revolutionising Bidding with</h1>
                 <h1 >AI-Powered Optimisation</h1>
@@ -30,21 +32,19 @@ const Banner = () => {
           <div className="ratings">
             <div className="rating">
               <Star_row></Star_row>
-              <p>Lorem ipsum dolor sit.</p>
+              <p>"Very practical"</p>
             </div>
             <div className="rating">
               <Star_row></Star_row>
-              <p>Lorem ipsum dolor sit. Lorem ipsum dolor </p>
+              <p>"The best investment for our productj team"</p>
             </div>
             <div className="rating">
               <Star_row></Star_row>
-              <p>Lorem ipsum dolor sit.</p>
+              <p>"Absolute brilliance"</p>
             </div>
           </div>
         </div>
-        <div className="banner-img">
-          <img src="banner1.png" alt="Banner Image"  />
-        </div>
+      
       </div>
     </div>
   );
