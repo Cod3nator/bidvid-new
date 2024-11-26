@@ -1458,6 +1458,8 @@ textarea::placeholder {
   align-items: start;
   flex-direction: column;
   gap: 27px;
+  flex-wrap: nowrap;
+  width: 24%;
 }
 .contact-add .line {
   width: 27px;
@@ -1525,6 +1527,7 @@ textarea::placeholder {
     align-items: start;
     flex-direction: column;
     gap: 27px;
+    width: max-content;
   }
   .contact button {
     font-size: 14px;

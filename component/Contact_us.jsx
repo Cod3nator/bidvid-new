@@ -72,7 +72,8 @@ const Contact_us = () => {
       <div className="container">
         <div className="contact-text">
           <span>Get Started</span>
-          <h2>Get in touch with us. We're here to assist you.</h2>
+          <h2>Get in touch.</h2>
+          {/*  with us. We're here to assist you */}
         </div>
         <div className="contact-form">
           <form className="contact" id="contact-form" onSubmit={handleFormSubmit}>
@@ -145,8 +146,8 @@ const Contact_us = () => {
             <div className="line"></div>
             <a href="mailto:support@bidvid.in	">support@bidvid.in	</a>
             <div className="details">
-              <span>Assistance hours:</span>
-              <p>Monday - Friday 6 am to 8 pm EST</p>
+              {/* <span>Assistance hours:</span>
+              <p>Monday - Friday 6 am to 8 pm EST</p> */}
             </div>
           </div>
           <div className="contact-add">
@@ -154,8 +155,8 @@ const Contact_us = () => {
             <div className="line"></div>
             <a href="tel:+91 9930451078">(9930) 451-078</a>
             <div className="details">
-              <span>Assistance hours:</span>
-              <p>Monday - Friday 6 am to 8 pm EST</p>
+              {/* <span>Assistance hours:</span>
+              <p>Monday - Friday 6 am to 8 pm EST</p> */}
             </div>
           </div>
         </div>
