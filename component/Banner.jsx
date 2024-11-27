@@ -36,7 +36,7 @@ const Banner = () => {
             </div>
             <div className="rating">
               <Star_row></Star_row>
-              <p>"The best investment for our productj team"</p>
+              <p>"The best investment for our product team"</p>
             </div>
             <div className="rating">
               <Star_row></Star_row>
