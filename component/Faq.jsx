@@ -3,28 +3,32 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const faqData = [
   {
-    question: "What services do you offer?",
-    answer: "We provide [list of services]."
+    question: "Whether it is a self-serve solution or a managed solution?",
+    answer: "BidVid offers a managed solution, where our expert team handles bid strategies, campaign management, and optimization for you using AI. Unlike self-serve solutions, which require users to manage everything independently, our managed approach ensures professional oversight, maximizing performance and saving you time."
+  },
+  // {
+  //   question: "How can I contact customer support?",
+  //   answer: "You can reach us via email at support@bidvid.in, or call us at (9930) 451-078."
+  // },
+  {
+    question: "What access is required?",
+    answer: "To optimize the campaign Standard access to DV360."
   },
   {
-    question: "How can I contact customer support?",
-    answer: "You can reach us via email at support@bidvid.in, or call us at (9930) 451-078."
+    question: "How will Bidvid optimize the campaign KPI?",
+    answer: "BidVid is an Ai solution which would adjust bids automatically or provide suggestions based on the performance of the campaign. This optimization could help maximize return on investment (ROI) by adjusting bids for high-performing placements or audiences."
   },
   {
-    question: "What is your return policy?",
-    answer: "We offer a [time period] return policy. Products must be in original condition and packaging."
+    question: "Will it affect the reach and frequency while implementing the Bidvid solution?",
+    answer: "Yes, implementing BidVid could affect the reach and frequency of your campaign, depending on how the platform optimizes for various metrics like audience targeting, budget allocation, and bidding strategy."
   },
   {
-    question: "Do you offer international shipping?",
-    answer: "Yes, we ship to many countries. Shipping costs will be calculated at checkout."
+    question: "Will Bidvid make any changes to the campaign settings?",
+    answer: "No, It will not tamper with your settings. It will work within the KPIs set by you."
   },
   {
-    question: "How can I track my order?",
-    answer: "Once your order is shipped, you will receive a tracking number via email."
-  },
-  {
-    question: "What payment methods do you accept?",
-    answer: "We accept credit cards, PayPal, and other secure payment options."
+    question: "How long will it take to start seeing the results after implementation?",
+    answer: "Results from the implementation can typically be observed within 24 to 48 hours."
   }
 ];
 
