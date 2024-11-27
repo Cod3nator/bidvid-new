@@ -71,7 +71,7 @@ const WhatsInside = () => {
             <img src="/inside-one.png" alt="" />
           </div>
           <div className="inside-content">
-            <h3>What's Inside:</h3>
+            <h3>Real-Time Bid Optimization</h3>
             <div className="inside-text-wrapper">
               <p>
                 Our advanced AI algorithms analyse each ad request in real time,
