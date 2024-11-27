@@ -16,7 +16,7 @@ const faqData = [
   },
   {
     question: "How will Bidvid optimize the campaign KPI?",
-    answer: "BidVid is an Ai solution which would adjust bids automatically or provide suggestions based on the performance of the campaign. This optimization could help maximize return on investment (ROI) by adjusting bids for high-performing placements or audiences."
+    answer: "BidVid is an AI solution which would adjust bids automatically or provide suggestions based on the performance of the campaign. This optimization could help maximize return on investment (ROI) by adjusting bids for high-performing placements or audiences."
   },
   {
     question: "Will it affect the reach and frequency while implementing the Bidvid solution?",
