@@ -1,16 +1,16 @@
 "use client";
 import Toast from "../../../component/dashboard/Toast";
 import PasswordInput from "../../../component/PasswordInput";
-import moment from "moment";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    userId: "",
     password: "",
+    confirm_password: "",
   });
 
   const [error, setError] = useState(null);
@@ -27,7 +27,7 @@ const Page = () => {
       ...prevData,
       [name]: value,
     }));
-    if (name === "password" || name === "confirmPassword") {
+    if (name === "password" || name === "confirm_password") {
       setPasswordMatchError(false);
     }
   };
@@ -38,14 +38,15 @@ const Page = () => {
     setError(null);
     // console.log(formData);
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirm_password) {
       setPasswordMatchError(true);
       return;
     }
     setPasswordMatchError(false);
+// console.log(formData);
 
     try {
-      const response = await fetch("/api/create", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/sign-up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,26 +57,25 @@ const Page = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Sign-in failed");
+        throw new Error(data.error || "Sign-up failed");
       }
-      localStorage.setItem("sessionToken", data.sessionToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-
-      console.log("Sign-in successful:", data);
+      // console.log(data);
+   
+      // console.log("Sign-up successful:", data);
       setToastSuccess(true);
-      setToastMessage("Sign In successful");
+      setToastMessage("Sign Up successful");
       setTimeout(() => {
         setToastSuccess(null);
-        router.push("/dashboard");
-      }, 500);
+        router.push("/login");
+      }, 50);
     } catch (error) {
       setError(error.message);
       setToastSuccess(false);
-      setToastMessage(error.message || "Sign-in failed");
+      setToastMessage(error.message || "Sign-up failed");
       setTimeout(() => {
         setToastSuccess(null);
       }, 5000);
-      console.error("Sign-in failed:", error.message);
+      console.error("Sign-up failed:", error.message);
     } finally {
       setLoading(false);
     }
@@ -104,19 +104,34 @@ const Page = () => {
                 <div className="form-group">
                   <input
                     type="text"
-                    name="name"
-                    placeholder="Full Name"
-                    value={formData.name}
+                    name="first_name"
+                    placeholder="First Name"
+                    value={formData.first_name}
                     onChange={handleChange}
                     className="p-2 w-full"
                     required
                   />
-                  <label htmlFor="name" className="text-sm text-gray-500">
-                    Full Name
+                  <label htmlFor="first_name" className="text-sm text-gray-500">
+                    First Name
                   </label>
                 </div>
               </div>
-
+              <div className="mb-4">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="last_name"
+                    placeholder="Last Name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    className="p-2 w-full"
+                    required
+                  />
+                  <label htmlFor="last_name" className="text-sm text-gray-500">
+                    Last Name
+                  </label>
+                </div>
+              </div>
               {/* Email Input */}
               <div className="mb-4">
                 <div className="form-group">
@@ -136,7 +151,7 @@ const Page = () => {
               </div>
 
               {/* User ID Input */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <div className="form-group">
                   <input
                     type="text"
@@ -151,7 +166,7 @@ const Page = () => {
                     User ID
                   </label>
                 </div>
-              </div>
+              </div> */}
 
               {/* Password Input */}
               <div className="mb-4">
@@ -167,15 +182,15 @@ const Page = () => {
                 <div className="form-group">
                   <input
                     type="password"
-                    name="confirmPassword"
+                    name="confirm_password"
                     placeholder="Confirm Password"
-                    value={formData.confirmPassword}
+                    value={formData.confirm_password}
                     onChange={handleChange}
                     className="p-2 w-full"
                     required
                   />
                   <label
-                    htmlFor="confirmPassword"
+                    htmlFor="confirm_password"
                     className="text-sm text-gray-500"
                   >
                     Confirm Password

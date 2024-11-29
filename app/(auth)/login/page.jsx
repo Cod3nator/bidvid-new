@@ -2,19 +2,19 @@
 import Toast from "../../../component/dashboard/Toast";
 import PasswordInput from "../../../component/PasswordInput";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Page = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [toastSuccess, setToastSuccess] = useState(null); 
-  const [error, setError] = useState(null); 
-  const [loading, setLoading] = useState(false); 
+  const [toastSuccess, setToastSuccess] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [restPassMail, setRestPassMail] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,51 +23,47 @@ const Page = () => {
       [name]: value,
     }));
   };
-
   const router = useRouter();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    router.push("/dashboard");
+    setLoading(true);
+    setError(null);
 
-    // setLoading(true);
-    // setError(null);
- 
-    // try{
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    //   const res = await fetch("/api/login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(formData),
-    //   });
-  
-    //   const data = await res.json();
-    //   if (!res.ok) {
-    //     throw new Error(data.error || 'Login-in failed'); 
-    //   }
-    //   localStorage.setItem('sessionToken', data.sessionToken);
-    //   localStorage.setItem('refreshToken', data.refreshToken);
-    //   setToastSuccess(true); 
-    //   setToastMessage("Login successful");
-    //   setTimeout(() => {
-    //     setToastSuccess(null); 
-    //     router.push("/dashboard");
-    //   }, 500);
-    // }catch (error) {
-    //   setError(error.message);
-    //   setToastSuccess(false);  
-    //   setToastMessage(error.message || "Login failed");
-    //   setTimeout(() => {
-    //     setToastSuccess(null);  
-    //   }, 5000);
-    //   console.error("Login failed:", error.message);
-    // }finally{
-    //   setLoading(false); 
-    // }
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Login-in failed");
+      }
+localStorage.setItem("access_token", data.access_token);
+localStorage.setItem("refresh_token", data.refresh_token);
+      setToastSuccess(true);
+      setToastMessage("Logged in successfully");
+      setTimeout(() => {
+        setToastSuccess(null);
+        router.push("/dashboard");
+      }, 50);
+    } catch (error) {
+      setError(error.message);
+      setToastSuccess(false);
+      setToastMessage(error.message || "Login failed");
+      setTimeout(() => {
+        setToastSuccess(null);
+      }, 5000);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  
   const handleForgotPassword = () => {
     setIsModalOpen(true);
   };
@@ -76,38 +72,14 @@ const Page = () => {
     setIsModalOpen(false);
   };
 
- 
-  const handldResetPass =async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("/api/reset-password/request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: restPassMail }), 
-      });
-
-      if (response.ok) {
-        router.push("/reset-password/?email=" + restPassMail);
-      } else {
-        alert("Email not found or request failed");
-      }
-    } catch (error) {
-      console.error("Error resetting password:", error);
-      alert("An error occurred. Please try again.");
-    }
-
-    handleCloseModal();
-  };
-
+  const handldResetPass = () => {};
 
   return (
     <>
       {toastSuccess !== null && (
         <Toast success={toastSuccess} message={toastMessage} />
       )}
-    
+
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
@@ -123,14 +95,14 @@ const Page = () => {
                 <div className="form-group">
                   <input
                     type="text"
-                    name="email"
+                    name="username"
                     placeholder="Email ID"
                     value={formData.userId}
                     onChange={handleChange}
                     className=" p-2 w-full"
                   />
                   <label htmlFor="userId" className="text-sm text-gray-500">
-                    User ID
+                    Email ID
                   </label>
                 </div>
               </div>
@@ -145,8 +117,9 @@ const Page = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
               </button>
             </form>
 
@@ -174,12 +147,12 @@ const Page = () => {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 "
             onClick={handleCloseModal}
           />
           {/* Modal */}
           <div
-            className="absolute bg-white p-6 shadow-md w-96 flex flex-col justify-center items-center "
+            className="absolute bg-white p-6 shadow-md w-96 flex flex-col justify-center items-center rounded-lg"
             style={{
               top: "50%",
               left: "50%",
@@ -195,7 +168,9 @@ const Page = () => {
                   name="email"
                   placeholder="Email Id"
                   value={formData.userId}
-                  onChange={(e)=>{setRestPassMail(e.target.value)}}
+                  onChange={(e) => {
+                    setRestPassMail(e.target.value);
+                  }}
                   className="border p-2 w-full"
                   required
                 />
@@ -203,16 +178,21 @@ const Page = () => {
                   Email Id
                 </label>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Reset Password
-              </button>
+              <div className="flex justify-center items-center space-x-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
+                >
+                  Reset Password
+                </button>
+                <button
+                  className="flex-1 bg-red-200 text-red-600 hover:bg-red-300 rounded-md py-2 focus:outline-none text-center"
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </button>
+              </div>
             </form>
-            <button className="w-full mt-4 text-red-600 bg-red-200 hover:bg-red-300 rounded-md py-2" onClick={handleCloseModal}>
-              Close
-            </button>
           </div>
         </>
       )}

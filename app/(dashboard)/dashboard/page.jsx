@@ -1,10 +1,9 @@
 "use client"
 import React, { useEffect, useState } from "react";
+import withProtectedRoute from '../../../component/dashboard/ProtectedRoute';
 import ClientDashboard from "../components/ClientDashboard";
 
-export const dynamic = 'force-dynamic';
-
-const DashboardPage = () => {
+const Dashboard = () => {
   const [campaignData, setCampaignData] = useState([]);
   const [headers, setHeaders] = useState([]);
 
@@ -34,4 +33,6 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+
+
+export default withProtectedRoute(Dashboard);

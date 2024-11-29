@@ -72,7 +72,7 @@ const Contact_us = () => {
       <div className="container">
         <div className="contact-text">
           <span>Get Started</span>
-          <h2>Get in touch.</h2>
+          <h2>Get in touch</h2>
           {/*  with us. We're here to assist you */}
         </div>
         <div className="contact-form">
