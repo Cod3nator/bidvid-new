@@ -4,6 +4,7 @@ import PasswordInput from "../../../component/PasswordInput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
+const backend_api = "https://devapi.bidvid.in";
 const Page = () => {
   const [formData, setFormData] = useState({
     first_name: "",
@@ -46,7 +47,7 @@ const Page = () => {
 // console.log(formData);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/sign-up`, {
+      const response = await fetch(`${backend_api}/sign-up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +81,7 @@ const Page = () => {
       setLoading(false);
     }
   };
-
+  console.log("test ", process.env.NEXT_PUBLIC_BACKEND_API);
   return (
     <>
       {toastSuccess !== null && (

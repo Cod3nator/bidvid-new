@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import withProtectedRoute from '../../../component/dashboard/ProtectedRoute';
 import ClientDashboard from "../components/ClientDashboard";
 
+const backend_api = "https://devapi.bidvid.in";
 const Dashboard = () => {
   const [campaignData, setCampaignData] = useState([]);
   const [headers, setHeaders] = useState([]);
@@ -10,7 +11,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://devapi.bidvid.in/campaign_reports', {
+        const response = await fetch(`${backend_api}/campaign_reports`, {
           cache: 'no-store',
         });
         const data = await response.json();

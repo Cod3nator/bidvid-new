@@ -1,14 +1,23 @@
-
-import Link from 'next/link';
+"use client";
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
+  const router = useRouter();
+  const handleGoBack = () => {
+    router.back();
+  };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-4xl font-bold text-gray-800">404 - Page Not Found</h1>
-      <p className="mt-2 text-gray-600">Sorry, the page you're looking for doesn't exist.</p>
-      <Link href="/" className="mt-4 text-blue-500 hover:underline">
-        Go back to Home
-      </Link>
+      <p className="mt-2 text-gray-600">
+        Sorry, the page you're looking for doesn't exist.
+      </p>
+      <div
+        onClick={handleGoBack}
+        className="cursor-pointer text-black hover:text-blue-600 transition-colors hover:underline"
+      >
+        Go Back
+      </div>
     </div>
   );
 }

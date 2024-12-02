@@ -4,6 +4,7 @@ import PasswordInput from "../../../component/PasswordInput";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
+const backend_api = "https://devapi.bidvid.in"
 const Page = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -31,7 +32,7 @@ const Page = () => {
     setError(null);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/login`, {
+      const res = await fetch(`${backend_api}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,12 +124,12 @@ localStorage.setItem("refresh_token", data.refresh_token);
               </button>
             </form>
 
-            <p
+            {/* <p
               className="mt-4 text-blue-600 cursor-pointer"
               onClick={handleForgotPassword}
             >
               Forgot Password?
-            </p>
+            </p> */}
 
             <div className="flex items-center justify-between mt-6">
               {/* <span>

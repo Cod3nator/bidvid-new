@@ -7,7 +7,6 @@ const brand = {
     reportId: "123456789",
   };
   
-
 const ClientDashboard = ({campaignData, headers}) => {
     const [dropdownOpen, setDropdownOpen] = useState({
         fitScore: false,
@@ -23,7 +22,7 @@ const ClientDashboard = ({campaignData, headers}) => {
       };
   return (
     <div className="bg-gray-100" style={{ height: "100%" }}>
-    <Navbar />
+  
    <div className="p-8 ">
      <div className="flex justify-between items-center mt-20 mb-4">
        <div className="text-sm space-x-4 flex ml-4 mb-4">

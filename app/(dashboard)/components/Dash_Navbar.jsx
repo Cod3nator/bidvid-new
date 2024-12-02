@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-
+const backend_api = "https://devapi.bidvid.in";
 const Navbar = () => {
   const [user, setUser] = useState({
     first_name: "Loading",
@@ -32,7 +32,7 @@ const Navbar = () => {
   
   
     try {
-      const user = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/my-profile`, {
+      const user = await fetch(`${backend_api}/my-profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const Navbar = () => {
           </div>
           {isClicked && (
             <div
-              className="absolute space-y-2 w-60 bg-white p-3 rounded-md shadow-lg border"
+              className="absolute space-y-2 w-72 bg-white p-6 rounded-md shadow-lg border"
               style={{ top: "100%", right: "0" }}
             >
               <p className="font-bold text-lg">{name}</p>

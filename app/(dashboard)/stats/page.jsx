@@ -68,10 +68,10 @@ const ChartPage=()=> {
   return (
     <>
 
-        <Navbar />
-      <div class="container mx-auto px-4">
-        <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 p-8">
-          {/* Dashboard Header */}
+        {/* <Navbar /> */}
+      <div class="container mx-auto p-8  py-24">
+        <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 p-4 ">
+       
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-semibold">Dashboard</h1>
             <p className="text-gray-500">Showing for: 21 Oct – 28 Oct 2020</p>
