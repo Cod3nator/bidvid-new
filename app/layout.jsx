@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import {GoogleTagManager} from "@next/third-party/google";
+import {GoogleAnalytics,GoogleTagManager } from "@next/third-party/google";
 export const metadata = {
   title: "BidVid",
   description: "Your Ad optimizer",
@@ -19,7 +19,8 @@ export default function RootLayout({ children }) {
         
       </head>
       <body>
-         <GoogleTagManager gtmId="GTM-MZ2T8MVC"/>
+         <GoogleAnalytics gaId="GTM-MZ2T8MVC"/>
+         <GoogleTagManager gtmId="GTM-MZ2T8MVC" />
         {children}
       </body>
     </html>
