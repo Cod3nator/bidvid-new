@@ -30,7 +30,19 @@ const Page = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
+    if (!formData.email && !formData.password) {
+      setToastSuccess(false);
+      setToastMessage("Please enter both email and password.");
+      setTimeout(() => {
+        setToastSuccess(null);
+      }, 5000);
+      setLoading(false);
+      return;
+    }
+  
+   
+  
     try {
       const res = await fetch(`${backend_api}/login`, {
         method: "POST",
@@ -39,23 +51,27 @@ const Page = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await res.json();
+  
       if (!res.ok) {
-        throw new Error(data.error || "Login-in failed");
+        throw new Error(data.error || "Login failed");
       }
-localStorage.setItem("access_token", data.access_token);
-localStorage.setItem("refresh_token", data.refresh_token);
+  
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
+  
+      // Show success toast
       setToastSuccess(true);
       setToastMessage("Logged in successfully");
       setTimeout(() => {
         setToastSuccess(null);
         router.push("/dashboard");
-      }, 50);
+      }, 150);
     } catch (error) {
       setError(error.message);
       setToastSuccess(false);
-      setToastMessage(error.message || "Login failed");
+      setToastMessage("Login failed. Please check your email and password and try again.");
       setTimeout(() => {
         setToastSuccess(null);
       }, 5000);
@@ -63,6 +79,7 @@ localStorage.setItem("refresh_token", data.refresh_token);
       setLoading(false);
     }
   };
+  
 
   
   const handleForgotPassword = () => {
