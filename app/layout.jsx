@@ -1,6 +1,6 @@
 import "./globals.css";
 
-
+import {GoogleTagManager} from "@next/third-party/google";
 export const metadata = {
   title: "BidVid",
   description: "Your Ad optimizer",
@@ -16,8 +16,10 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
           rel="stylesheet"
         />
+        
       </head>
       <body>
+         <GoogleTagManager gtmId="GTM-MZ2T8MVC"/>
         {children}
       </body>
     </html>
