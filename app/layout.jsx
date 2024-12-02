@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import {GoogleAnalytics,GoogleTagManager } from "@next/third-party/google";
+import {GoogleAnalytics,GoogleTagManager } from "@next/third-parties/google";
 export const metadata = {
   title: "BidVid",
   description: "Your Ad optimizer",
