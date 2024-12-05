@@ -81,22 +81,48 @@ const Page = () => {
   };
   
 
+  const handleForgotPassword = async () => {
   
-  const handleForgotPassword = () => {
-    setIsModalOpen(true);
+    // setIsModalOpen(true);
+    try {
+      const response = await fetch(`${backend_api}/send-forgot-password-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: restPassMail }),
+      });
+  
+      if (!response.success || !response) {
+        throw new Error("Failed to send forgot password email");
+      }
+      setToastSuccess(true);
+      setToastMessage("Password reset email sent successfully!");
+      setTimeout(() => {
+        setToastSuccess(null);
+        setIsModalOpen(false);
+      }, 5000);
+    } catch (error) {
+      console.error("Error sending forgot password email:", error);
+      setToastSuccess(false);
+      setToastMessage("Error sending password reset email.");
+      setTimeout(() => {
+        setToastSuccess(null);
+      }, 5000);
+    }
   };
+  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  const handldResetPass = () => {};
 
   return (
     <>
-      {toastSuccess !== null && (
+      {/* {toastSuccess !== null && (
         <Toast success={toastSuccess} message={toastMessage} />
-      )}
+      )} */} 
 
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
@@ -141,34 +167,31 @@ const Page = () => {
               </button>
             </form>
 
-            {/* <p
+            <p
               className="mt-4 text-blue-600 cursor-pointer"
-              onClick={handleForgotPassword}
+              onClick={(e)=>{setIsModalOpen(true)}}
             >
               Forgot Password?
-            </p> */}
+            </p>
 
             <div className="flex items-center justify-between mt-6">
-              {/* <span>
+              <span>
                 Don't have an account?{" "}
-                <a href="/create-account" className="text-blue-600">
+                <a href="/signup" className="text-blue-600">
                   Sign Up
                 </a>
-              </span> */}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Forgot Password Modal */}
       {isModalOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 "
             onClick={handleCloseModal}
           />
-          {/* Modal */}
           <div
             className="absolute bg-white p-6 shadow-md w-96 flex flex-col justify-center items-center rounded-lg"
             style={{
@@ -179,16 +202,14 @@ const Page = () => {
             }}
           >
             <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
-            <form onSubmit={handldResetPass}>
+            <form >
               <div className="form-group mb-4">
                 <input
                   type="text"
                   name="email"
                   placeholder="Email Id"
                   value={formData.userId}
-                  onChange={(e) => {
-                    setRestPassMail(e.target.value);
-                  }}
+                  onChange={(e) => setRestPassMail(e.target.value)}
                   className="border p-2 w-full"
                   required
                 />
@@ -198,7 +219,7 @@ const Page = () => {
               </div>
               <div className="flex justify-center items-center space-x-4">
                 <button
-                  type="submit"
+                  onClick={handleForgotPassword}
                   className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
                 >
                   Reset Password

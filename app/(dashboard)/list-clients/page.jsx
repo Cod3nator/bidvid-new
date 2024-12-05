@@ -45,7 +45,6 @@ const Client = () => {
 
   return (
     <>
-      <Navbar />
       <div className="p-8 bg-gray-100 h-screen">
         <div
           className="table-container bg-white p-8 rounded-lg mt-20 mb-4"

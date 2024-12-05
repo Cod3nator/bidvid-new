@@ -1,15 +1,26 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { EyeOff, Eye } from "lucide-react";
 const backend_api = "https://devapi.bidvid.in";
+
 const Navbar = () => {
   const [user, setUser] = useState({
     first_name: "Loading",
     last_name: "User",
     email: "loading@example.com",
     roles: [{ name: "guest" }],
-  }); 
+  });
+  const [formData, setFormData] = useState({
+    current_password: "",
+    new_password: "",
+    confirm_password: "",
+  });
   const [isClicked, setClicked] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [oldPassword, setOldPassword] = useState(false);
+  // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
       const data = await getUser();
@@ -22,31 +33,26 @@ const Navbar = () => {
   }, []);
 
   const getUser = async () => {
-    // Fetch the access_token from cookies
     const accessToken = localStorage.getItem("access_token");
-  
     if (!accessToken) {
       console.error("Access token not found!");
       return;
     }
-  
-  
+
     try {
-      const user = await fetch(`${backend_api}/my-profile`, {
+      const response = await fetch(`${backend_api}/my-profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
       });
-  
-      const data = await user.json();
-      return data;
+
+      return response.json();
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
-  
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -55,67 +61,217 @@ const Navbar = () => {
     window.location.href = "/login";
   };
 
+  const togglePasswordModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  
+    if (name === "confirm_password" && value !== formData.new_password) {
+      setPasswordMatchError(true);
+    } else {
+      setPasswordMatchError(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
+      console.error("Access token not found!");
+      return;
+    }
+console.log(formData.confirm_password, formData.new_password, formData.current_password +"PAssword swap");
+
+    try {
+      const response = await fetch(`${backend_api}/my-profile/password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          current_password: formData.current_password,
+          new_password: formData.new_password,
+          confirm_password: formData.confirm_password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      togglePasswordModal();
+    } catch (error) {
+      console.error("Error changing password:", error);
+    }
+  };
+
   const { first_name, last_name, email, roles } = user;
   const name = `${first_name} ${last_name}`;
   const firstChar = first_name.charAt(0).toUpperCase();
 
-  const handleAvatarClick = () => {
-    setClicked((prev) => !prev);
-  };
-
   return (
-    <nav className="flex items-center justify-between bg-gray-900 p-4 mb-8">
-      <div className="text-white font-bold text-xl">
-        <img src="/logo.png" alt="Brand Logo" className="h-8" />
-      </div>
-
-      <div className="flex items-center space-x-16">
-        <menu className="flex items-center space-x-4">
-          <a href="/autoplugin" className="text-white hover:text-blue-400">
-            AutoPlugin
+    <>
+      <nav className="flex items-center justify-between bg-gray-900 p-4 mb-8">
+        <div className="text-white font-bold text-xl">
+          <a href="/dashboard">
+            <img src="/logo.png" alt="Brand Logo" className="h-8" />
           </a>
-          <a href="/partners" className="text-white hover:text-blue-400">
-            Partners
-          </a>
-          <a href="/user-management" className="text-white hover:text-blue-400">
-            User Management
-          </a>
-          <a href="/stats" className="text-white hover:text-blue-400">
-            Stats
-          </a>
-        </menu>
-
-        <div className="relative">
-          <div
-            className="flex items-center justify-center bg-red-100 h-10 w-10 rounded-full border-2 border-white cursor-pointer"
-            onClick={handleAvatarClick}
-          >
-            {firstChar}
-          </div>
-          {isClicked && (
-            <div
-              className="absolute space-y-2 w-72 bg-white p-6 rounded-md shadow-lg border"
-              style={{ top: "100%", right: "0" }}
-            >
-              <p className="font-bold text-lg">{name}</p>
-              <p className="text-sm text-gray-600">{email}</p>
-              {roles && roles.length > 0 && (
-                <p className="mt-2 text-sm text-gray-700">
-                  Roles: {roles.map((role) => role.name).join(", ")}
-                </p>
-              )}
-              <hr className="my-2" />
-              <button
-                onClick={handleLogout}
-                className="w-full text-sm text-red-600 bg-gray-100 py-1 rounded-md hover:bg-red-100"
-              >
-                Logout
-              </button>
-            </div>
-          )}
         </div>
-      </div>
-    </nav>
+        <div className="flex items-center space-x-16">
+          <menu className="flex items-center space-x-4">
+            <a href="/users" className="text-white hover:text-blue-400">
+              Users
+            </a>
+            <a href="/stats" className="text-white hover:text-blue-400">
+              Stats
+            </a>
+          </menu>
+          <div className="relative">
+            <div
+              className="flex items-center justify-center bg-red-100 h-10 w-10 rounded-full border-2 border-white cursor-pointer"
+              onClick={() => setClicked((prev) => !prev)}
+            >
+              {firstChar}
+            </div>
+            {isClicked && (
+              <div
+                className="absolute space-y-2 w-72 bg-white p-6 rounded-md shadow-lg border"
+                style={{ top: "100%", right: "0" }}
+              >
+                <p className="font-bold text-lg">{name}</p>
+                <p className="text-sm text-gray-600">{email}</p>
+                {roles.length > 0 && (
+                  <p className="mt-2 text-sm text-gray-700">
+                    Roles: {roles.map((role) => role.name).join(", ")}
+                  </p>
+                )}
+                <hr className="my-2" />
+                <button
+                  onClick={() => {
+                    togglePasswordModal();
+                    setClicked(false);
+                  }}
+                  className="w-full text-sm text-blue-600 bg-gray-100 py-1 rounded-md hover:bg-blue-100"
+                >
+                  Change Password
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-sm text-red-600 bg-gray-100 py-1 rounded-md hover:bg-red-100"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+      {isModalOpen && (
+        <>
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40" />
+          <div
+            className="absolute bg-white p-6 shadow-lg w-96 flex flex-col justify-center items-center rounded-lg"
+            style={{
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 999,
+            }}
+          >
+            <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
+            <form onSubmit={handleResetPassword}>
+              {!oldPassword && (
+                <>
+                <div className="form-group relative">
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    name="current_password"
+                    placeholder="Current Password"
+                    value={formData.current_password}
+                    onChange={handlePasswordChange}
+                    className="p-2 w-full border placeholder:text-gray-400"
+                    required
+                  />
+                  <label htmlFor="new_password">Current Password</label>
+                  <button
+                    type="button"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-2 text-gray-500 text-sm focus:outline-none"
+                  >
+                    {passwordVisible ? <EyeOff /> : <Eye />}
+                  </button>
+                </div>
+                <button
+                onClick={()=>setOldPassword(true)}
+                className="bg-blue-600 text-white py-2 rounded-md w-full"
+              >
+                Change Password
+              </button>
+                </>
+              )}
+              {oldPassword && (
+                <>
+                  <div className="mb-6">
+                    <div className="form-group relative">
+                      <input
+                        type={passwordVisible ? "text" : "password"}
+                        name="new_password"
+                        placeholder="New Password"
+                        value={formData.new_password}
+                        onChange={handlePasswordChange}
+                        className="p-2 w-full border placeholder:text-gray-400"
+                        required
+                      />
+                      <label htmlFor="new_password">Password</label>
+                      <button
+                        type="button"
+                        onClick={() => setPasswordVisible(!passwordVisible)}
+                        className="absolute inset-y-0 right-2 text-gray-500 text-sm focus:outline-none"
+                      >
+                        {passwordVisible ? <EyeOff /> : <Eye />}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mb-6">
+                    <div className="form-group">
+                      <input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="Confirm Password"
+                        value={formData.confirm_password}
+                        onChange={handlePasswordChange}
+                        className="p-2 w-full border placeholder:text-gray-400"
+                        required
+                      />
+                      <label htmlFor="confirm_password">Confirm Password</label>
+                    </div>
+                    {passwordMatchError && (
+                      <small className="text-red-500">
+                        Passwords do not match.
+                      </small>
+                    )}
+                  </div>
+                  <button
+                type="submit"
+                className="bg-blue-600 text-white py-2 rounded-md w-full"
+              >
+                Set Password
+              </button>
+                </>
+              )}
+             
+            </form>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
