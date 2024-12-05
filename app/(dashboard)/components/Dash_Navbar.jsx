@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { EyeOff, Eye } from "lucide-react";
+import Toast from "@/component/dashboard/Toast";
+import { ArrowLeft } from 'lucide-react';
 const backend_api = "https://devapi.bidvid.in";
 
 const Navbar = () => {
@@ -20,6 +22,8 @@ const Navbar = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [oldPassword, setOldPassword] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSuccess, setToastSuccess] = useState(null);
   // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
@@ -88,7 +92,6 @@ const Navbar = () => {
       console.error("Access token not found!");
       return;
     }
-console.log(formData.confirm_password, formData.new_password, formData.current_password +"PAssword swap");
 
     try {
       const response = await fetch(`${backend_api}/my-profile/password`, {
@@ -105,9 +108,15 @@ console.log(formData.confirm_password, formData.new_password, formData.current_p
       });
 
       const data = await response.json();
-      console.log(data);
+      setToastMessage(data.message);
+      setToastSuccess(data.success);
       togglePasswordModal();
+      formData.current_password = "";
+      formData.new_password = "";
+      formData.confirm_password = "";
     } catch (error) {
+      setToastMessage("Password should be at least 8 characters.");
+      setToastSuccess(false);
       console.error("Error changing password:", error);
     }
   };
@@ -209,7 +218,13 @@ console.log(formData.confirm_password, formData.new_password, formData.current_p
                   </button>
                 </div>
                 <button
-                onClick={()=>setOldPassword(true)}
+                onClick={()=>{
+                  if(formData.current_password){
+                    setOldPassword(true)
+                  }else{
+                    setOldPassword(false)
+                  }
+                }}
                 className="bg-blue-600 text-white py-2 rounded-md w-full"
               >
                 Change Password
@@ -218,6 +233,7 @@ console.log(formData.confirm_password, formData.new_password, formData.current_p
               )}
               {oldPassword && (
                 <>
+                     <span className="p-4" onClick={()=>setOldPassword(false)}> <ArrowLeft /></span>
                   <div className="mb-6">
                     <div className="form-group relative">
                       <input
@@ -261,6 +277,7 @@ console.log(formData.confirm_password, formData.new_password, formData.current_p
                   <button
                 type="submit"
                 className="bg-blue-600 text-white py-2 rounded-md w-full"
+                disabled={passwordMatchError}
               >
                 Set Password
               </button>
@@ -270,6 +287,10 @@ console.log(formData.confirm_password, formData.new_password, formData.current_p
             </form>
           </div>
         </>
+      )}
+
+      {toastSuccess && (
+        <Toast success={toastSuccess} message={toastMessage} />
       )}
     </>
   );
