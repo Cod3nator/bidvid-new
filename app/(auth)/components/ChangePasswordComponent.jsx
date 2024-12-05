@@ -13,10 +13,9 @@ const ChangePass = () => {
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
-  
+  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -59,6 +58,7 @@ const ChangePass = () => {
         alert("Failed to change the password.");
       } else {
         alert("Password changed successfully!");
+        router.push("/login");
         setFormData({ new_password: "", confirm_password: "" });
       }
     } catch (error) {

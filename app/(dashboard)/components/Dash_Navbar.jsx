@@ -184,7 +184,7 @@ const Navbar = () => {
       </nav>
       {isModalOpen && (
         <>
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40" />
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40"  onClick={togglePasswordModal}/>
           <div
             className="absolute bg-white p-6 shadow-lg w-96 flex flex-col justify-center items-center rounded-lg"
             style={{
