@@ -1,10 +1,10 @@
 "use client";
-import Toast from "../../../component/dashboard/Toast";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 import PasswordInput from "../../../component/PasswordInput";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const backend_api = "https://devapi.bidvid.in"
+const backend_api = "https://devapi.bidvid.in";
 const Page = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -12,10 +12,9 @@ const Page = () => {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSuccess, setToastSuccess] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingReq, setLoadingReq] = useState(false);
   const [restPassMail, setRestPassMail] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,19 +29,13 @@ const Page = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     if (!formData.email && !formData.password) {
-      setToastSuccess(false);
-      setToastMessage("Please enter both email and password.");
-      setTimeout(() => {
-        setToastSuccess(null);
-      }, 5000);
+      toast.info("Please enter your Email and Password.");
       setLoading(false);
       return;
     }
-  
-   
-  
+
     try {
       const res = await fetch(`${backend_api}/login`, {
         method: "POST",
@@ -51,81 +44,67 @@ const Page = () => {
         },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await res.json();
-  
+
       if (!res.ok) {
+        toast.error(`${data.message}`, { autoClose: false });
         throw new Error(data.error || "Login failed");
       }
-  
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
-  
-      // Show success toast
-      setToastSuccess(true);
-      setToastMessage("Logged in successfully");
-      setTimeout(() => {
-        setToastSuccess(null);
-        router.push("/dashboard");
-      }, 150);
+      router.push("/dashboard");
+      toast.success("Logged in successfully",{autoClose:1000});
+    
     } catch (error) {
-      setError(error.message);
-      setToastSuccess(false);
-      setToastMessage("Login failed. Please check your email and password and try again.");
-      setTimeout(() => {
-        setToastSuccess(null);
-      }, 5000);
+      toast.error(
+        "Login failed. Please check your email and password and try again."
+      );
     } finally {
       setLoading(false);
     }
   };
-  
 
-  const handleForgotPassword = async () => {
-  
-    // setIsModalOpen(true);
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setLoadingReq(true);
+    if (!restPassMail) {
+      toast.error("Please enter your email.");
+      setLoadingReq(false);
+    }
+
     try {
-      const response = await fetch(`${backend_api}/send-forgot-password-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: restPassMail }),
-      });
-  
+      const response = await fetch(
+        `${backend_api}/send-forgot-password-email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: restPassMail }),
+        }
+      );
+      const resp = await response.json();
       if (!response.success || !response) {
+        toast.error(`${resp.message}`, { autoClose: false });
         throw new Error("Failed to send forgot password email");
       }
-      setToastSuccess(true);
-      setToastMessage("Password reset email sent successfully!");
-      setTimeout(() => {
-        setToastSuccess(null);
-        setIsModalOpen(false);
-      }, 5000);
+      toast.success("Password reset email sent successfully.");
+      handleCloseModal();
     } catch (error) {
       console.error("Error sending forgot password email:", error);
-      setToastSuccess(false);
-      setToastMessage("Error sending password reset email.");
-      setTimeout(() => {
-        setToastSuccess(null);
-      }, 5000);
+      toast.error("Failed to send forgot password email.");
+    } finally {
+      setLoadingReq(false);
     }
   };
-  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-
-
   return (
     <>
-      {toastSuccess !== null && (
-        <Toast success={toastSuccess} message={toastMessage} />
-      )} 
-     
-
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
@@ -136,7 +115,7 @@ const Page = () => {
         <div className="w-1/2 bg-white flex justify-center items-center">
           <div className="w-full max-w-md p-8">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">Login</h2>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className="mb-4">
                 <div className="form-group">
                   <input
@@ -161,7 +140,7 @@ const Page = () => {
               </div>
 
               <button
-                type="submit"
+                onClick={handleSubmit}
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={loading}
               >
@@ -171,7 +150,9 @@ const Page = () => {
 
             <p
               className="mt-4 text-blue-600 cursor-pointer"
-              onClick={(e)=>{setIsModalOpen(true)}}
+              onClick={(e) => {
+                setIsModalOpen(true);
+              }}
             >
               Forgot Password?
             </p>
@@ -204,7 +185,7 @@ const Page = () => {
             }}
           >
             <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
-            <form >
+            <form>
               <div className="form-group mb-4">
                 <input
                   type="text"
@@ -223,8 +204,9 @@ const Page = () => {
                 <button
                   onClick={handleForgotPassword}
                   className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
+                  disabled={loadingReq}
                 >
-                  Reset Password
+                  {loadingReq ? "Requesting..." : " Reset Password"}
                 </button>
                 <button
                   className="flex-1 bg-red-200 text-red-600 hover:bg-red-300 rounded-md py-2 focus:outline-none text-center"

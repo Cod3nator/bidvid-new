@@ -2,12 +2,12 @@
 import React, { useState } from "react";
 import { validateName, validateNumber } from "../utils/validationFunction";
 import { CircleX } from 'lucide-react';
-
+const backend_api = "https://devapi.bidvid.in";
 const Contact_us = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    mobile: "",
     message: "",
   });
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ const Contact_us = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(`${backend_api}/contact-us`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const Contact_us = () => {
       setFormData({
         name: "",
         email: "",
-        phone: "",
+        mobile: "",
         message: "",
       });
     } catch (error) {
@@ -105,13 +105,13 @@ const Contact_us = () => {
                 <div className="form-group">
                   <input
                     type="tel"
-                    name="phone"
-                    placeholder="Phone Number (optional)"
-                    value={formData.phone}
+                    name="mobile"
+                    placeholder="Mobile Number (optional)"
+                    value={formData.mobile}
                     onChange={handleInputChange}
                     onInput={validateNumber}
                   />
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="Mobile">Mobile Number</label>
                 </div>
               </div>
               <div className="message">

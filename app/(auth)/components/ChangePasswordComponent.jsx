@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { EyeOff, Eye } from 'lucide-react';
 import { useRouter, useSearchParams } from "next/navigation";
-import Toast from "@/component/dashboard/Toast";
-import ToastContainer from "@/component/dashboard/Toast";
+import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
 
 const ChangePass = () => {
@@ -37,6 +36,7 @@ const ChangePass = () => {
 
     if (!token) {
       console.error("No token found in URL.");
+      toast.error("No token found in URL.",{autoClose:false});
       return;
     }
 
@@ -54,16 +54,16 @@ const ChangePass = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        toast.error(errorData.message || "Failed to change the password",{autoClose:false});
         console.error("Error changing password:", errorData);
-        alert("Failed to change the password.");
       } else {
-        alert("Password changed successfully!");
+        toast.success("Password changed successfully.",{autoClose:1000});
         router.push("/login");
         setFormData({ new_password: "", confirm_password: "" });
       }
     } catch (error) {
       console.error("Error changing password:", error);
-      alert("An error occurred while changing the password.");
+      toast.error("Failed to change the password",{autoClose:false});
     }
   };
 

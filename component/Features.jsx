@@ -18,7 +18,7 @@ const Features = () => {
             </p>
            
            </div>
-           <button className='inter-button'><span>Get Started</span><Arrow_right/></button>
+           <button className='inter-button'><a href='/contact-us'>Get Started</a><Arrow_right/></button>
           </div>
         </div>
 

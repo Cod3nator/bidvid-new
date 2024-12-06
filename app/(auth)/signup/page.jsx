@@ -1,9 +1,10 @@
 "use client";
+import { validateName } from "@/utils/validationFunction";
 import Toast from "../../../component/dashboard/Toast";
-import PasswordInput from "../../../component/PasswordInput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-
+import { EyeOff, Eye, BadgeAlert } from "lucide-react";
+import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
 const Page = () => {
   const [formData, setFormData] = useState({
@@ -16,19 +17,41 @@ const Page = () => {
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSuccess, setToastSuccess] = useState(null);
-
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
+    setLoading(false);
     const { name, value } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]:
+        name === "first_name" || name === "last_name"
+          ? value.charAt(0).toUpperCase() + value.slice(1)
+          : value,
     }));
-    if (name === "password" || name === "confirm_password") {
+
+    if (name === "password") {
+      const isStrongPassword = /^[A-Za-z\d]{8,}$/.test(value);
+
+      const isTooShort = value.length < 8;
+
+      if (!isStrongPassword) {
+        setPasswordError(true);
+      } else {
+        setPasswordError(false);
+      }
+
+      if (isTooShort) {
+        setPasswordError(false);
+      }
+    }
+    if (name === "confirm_password" && formData.password !== value) {
+      setPasswordMatchError(true);
+    } else {
       setPasswordMatchError(false);
     }
   };
@@ -37,14 +60,12 @@ const Page = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    // console.log(formData);
 
     if (formData.password !== formData.confirm_password) {
       setPasswordMatchError(true);
       return;
     }
     setPasswordMatchError(false);
-// console.log(formData);
 
     try {
       const response = await fetch(`${backend_api}/sign-up`, {
@@ -60,33 +81,20 @@ const Page = () => {
       if (!response.ok) {
         throw new Error(data.error || "Sign-up failed");
       }
-      // console.log(data);
-   
-      // console.log("Sign-up successful:", data);
-      setToastSuccess(true);
-      setToastMessage("Sign Up successful");
-      setTimeout(() => {
-        setToastSuccess(null);
-        router.push("/login");
-      }, 50);
+      toast.success("Sign-up successful");
+      router.push("/login");
     } catch (error) {
       setError(error.message);
-      setToastSuccess(false);
-      setToastMessage(error.message || "Sign-up failed");
-      setTimeout(() => {
-        setToastSuccess(null);
-      }, 5000);
+      toast.error(error.message, { autoClose: false });
+      toast.error("Sign-up failed");
       console.error("Sign-up failed:", error.message);
     } finally {
       setLoading(false);
     }
   };
-  console.log("test ", process.env.NEXT_PUBLIC_BACKEND_API);
   return (
     <>
-      {toastSuccess !== null && (
-        <Toast success={toastSuccess} message={toastMessage} />
-      )}
+   
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
@@ -109,6 +117,7 @@ const Page = () => {
                     placeholder="First Name"
                     value={formData.first_name}
                     onChange={handleChange}
+                    onInput={validateName}
                     className="p-2 w-full"
                     required
                   />
@@ -125,6 +134,7 @@ const Page = () => {
                     placeholder="Last Name"
                     value={formData.last_name}
                     onChange={handleChange}
+                    onInput={validateName}
                     className="p-2 w-full"
                     required
                   />
@@ -151,34 +161,49 @@ const Page = () => {
                 </div>
               </div>
 
-              {/* User ID Input */}
-              {/* <div className="mb-4">
-                <div className="form-group">
+              <div className="mb-6">
+                <div className="form-group relative">
                   <input
-                    type="text"
-                    name="userId"
-                    placeholder="User ID"
-                    value={formData.userId}
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
                     onChange={handleChange}
-                    className="p-2 w-full"
+                    className={`p-2 w-full border ${
+                      passwordError ? "border-red-500" : "border-gray-300"
+                    } placeholder:text-gray-400`}
                     required
                   />
-                  <label htmlFor="userId" className="text-sm text-gray-500">
-                    User ID
-                  </label>
+                  <label htmlFor="password">Password</label>
+                  <button
+                    type="button"
+                    onClick={() => setPasswordVisible(!passwordVisible)}
+                    className="absolute inset-y-0 right-2 text-gray-500 text-sm focus:outline-none"
+                  >
+                    {passwordVisible ? <EyeOff /> : <Eye />}
+                  </button>
                 </div>
-              </div> */}
-
-              {/* Password Input */}
-              <div className="mb-4">
-                <PasswordInput
-                  password={formData.password}
-                  onChange={handleChange}
-                  required
-                />
+                {formData.password.length > 0 && (
+                  <ul>
+                    <li
+                      className={`flex items-center text-sm mt-2 ${
+                        passwordError
+                          ? "text-red-500"
+                          : formData.password.length < 8
+                          ? "text-yellow-500"
+                          : "text-green-500"
+                      }`}
+                    >
+                      <BadgeAlert size={20} strokeWidth={1} className="mr-2" />
+                      {passwordError
+                        ? "The password mayThe password may only contain letters, numbers, and dashes."
+                        : formData.password.length < 8
+                        ? "Password must be at least 8 characters."
+                        : "Strong Password."}
+                    </li>
+                  </ul>
+                )}
               </div>
-
-              {/* Confirm Password Input */}
               <div className="mb-6">
                 <div className="form-group">
                   <input
@@ -207,8 +232,9 @@ const Page = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={loading}>
-                {loading ? 'Signing in...' : 'Sign In'}
+                disabled={loading}
+              >
+                {loading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { EyeOff, Eye } from "lucide-react";
 import Toast from "@/component/dashboard/Toast";
 import { ArrowLeft } from 'lucide-react';
+import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
 
 const Navbar = () => {
@@ -108,15 +109,20 @@ const Navbar = () => {
       });
 
       const data = await response.json();
-      setToastMessage(data.message);
-      setToastSuccess(data.success);
+      console.log(data);
+      
+      if(data.success === false){
+        toast.error(data.message,{autoClose:false});
+        toast.error(data.errors.new_password[0],{autoClose:false});
+        return;
+      }
+      toast.success(data.message,{autoClose:1000});
       togglePasswordModal();
       formData.current_password = "";
       formData.new_password = "";
       formData.confirm_password = "";
     } catch (error) {
-      setToastMessage("Password should be at least 8 characters.");
-      setToastSuccess(false);
+      toast.error("Failed to change the password",{autoClose:false});
       console.error("Error changing password:", error);
     }
   };
