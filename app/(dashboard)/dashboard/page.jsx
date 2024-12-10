@@ -1,39 +1,52 @@
-"use client"
-import React, { useEffect, useState } from "react";
-import withProtectedRoute from '../../../component/dashboard/ProtectedRoute';
-import ClientDashboard from "../components/ClientDashboard";
+"use client";
+import { useEffect, useState } from "react";
 
-const backend_api = "https://devapi.bidvid.in";
-const Dashboard = () => {
-  const [campaignData, setCampaignData] = useState([]);
-  const [headers, setHeaders] = useState([]);
+const ChartPage = () => {
+  const [scale, setScale] = useState(1);
+
+  const adjustIframe = () => {
+    const iframe = document.getElementById("scaled-frame");
+    if (iframe) {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+     console.log(screenWidth,screenHeight);
+     
+      // Set iframe dimensions to match the screen size
+      iframe.style.width = `${screenWidth}px`;
+      iframe.style.height = `${screenHeight - 100}px`;
+
+      // Adjust scale based on a preferred zoom-out factor
+      const scaleFactor = Math.min(screenWidth / 1200, screenHeight / 800); // Adjust these ratios as needed
+      console.log(scaleFactor);
+      
+      setScale(scaleFactor);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${backend_api}/campaign_reports`, {
-          cache: 'no-store',
-        });
-        const data = await response.json();
-        setCampaignData(data);
-        
-        const headers = Object.keys(data[0]).map((key) =>
-          key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
-        );
-        setHeaders(headers);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    // Run adjustment on component mount and on resize
+    adjustIframe();
+    window.addEventListener("resize", adjustIframe);
+
+    return () => {
+      window.removeEventListener("resize", adjustIframe);
     };
-    
-    fetchData();
   }, []);
 
   return (
-    <ClientDashboard campaignData={campaignData} headers={headers} />
+    <>
+      <div className="iframe-container mt-24" style={{ overflow: "hidden" }} >
+        <iframe
+          id="scaled-frame"
+          className="scaled-frame"
+          src="https://lookerstudio.google.com/embed/reporting/89f872ca-67c6-4d12-9b61-a9e1c0ee693c/page/JkAWE"
+          allowFullScreen
+          // sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+         
+        />
+      </div>
+    </>
   );
 };
 
-
-
-export default withProtectedRoute(Dashboard);
+export default ChartPage;

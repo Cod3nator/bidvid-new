@@ -144,9 +144,9 @@ const Navbar = () => {
             <a href="/users" className="text-white hover:text-blue-400">
               Users
             </a>
-            <a href="/stats" className="text-white hover:text-blue-400">
+            {/* <a href="/stats" className="text-white hover:text-blue-400">
               Stats
-            </a>
+            </a> */}
           </menu>
           <div className="relative">
             <div

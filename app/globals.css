@@ -1905,3 +1905,17 @@ textarea::placeholder {
     height: 100lvh;
   }
 }
+
+
+
+
+/* #scaled-frame {
+  width: 1000px;
+  height: 2000px;
+  border: 0px;
+} */
+
+#scaled-frame {
+  /* zoom:90%; */
+
+}
