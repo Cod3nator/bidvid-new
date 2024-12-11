@@ -83,7 +83,6 @@ const WhatsInside = () => {
               <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Dynamic adjustment of auction parameters</li>
                 <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Real-time analysis of user behavior and market conditions</li>
                 <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Seamless integration with your existing ad tech stack</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />How to get Airtable base to JSON</li>
               </ul>
             </div>
           </div>
@@ -96,16 +95,12 @@ const WhatsInside = () => {
             <h3>Maximize Return on Ad Spend (ROAS)</h3>
             <div className="inside-text-wrapper">
               <p>
-                Our advanced AI algorithms analyse each ad request in real time,
-                dynamically adjusting key parameters such as CPM floor, auction
-                timeout rate, participating bidders, and allowed ad sizes. This
-                ensures the highest possible yield from every ad impression.
+              Boost your campaign's return on ad spend (ROAS) by targeting impressions that yield the most beneficial results for your online business. Our solution is compatible with leading DSPs and inventory channels, ensuring broad reach and effective optimisation.
               </p>
               <ul>
-              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Dynamic adjustment of auction parameters</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Real-time analysis of user behavior and market conditions</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Seamless integration with your existing ad tech stack</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />How to get Airtable base to JSON</li>
+              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Enhanced ROAS through AI-driven targeting</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Focus on high-impact impressions</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Available across multiple DSPs and inventory channels</li>
               </ul>
             </div>
           </div>
@@ -118,16 +113,12 @@ const WhatsInside = () => {
             <h3>Customization Reporting & Analytics</h3>
             <div className="inside-text-wrapper">
               <p>
-                Our advanced AI algorithms analyse each ad request in real time,
-                dynamically adjusting key parameters such as CPM floor, auction
-                timeout rate, participating bidders, and allowed ad sizes. This
-                ensures the highest possible yield from every ad impression.
+              Maintain full transparency and control over your ad operations with our intuitive dashboard. Access granular reports and analytics to fine-tune parameters based on your specific business goals and priorities.
               </p>
               <ul>
-              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} /> Dynamic adjustment of auction parameters</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Real-time analysis of user behavior and market conditions</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Seamless integration with your existing ad tech stack</li>
-                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />How to get Airtable base to JSON</li>
+              <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Detailed, customisable reporting</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Granular performance analytics</li>
+                <li><Check size={20} color="#fcfcfc" strokeWidth={1.5} />Full visibility into optimisation processes</li>
               </ul>
             </div>
           </div>

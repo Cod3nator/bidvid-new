@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useMemo } from "react";
 import { EyeOff, Eye } from "lucide-react";
 import Toast from "@/component/dashboard/Toast";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from "lucide-react";
 import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
 
@@ -11,7 +12,7 @@ const Navbar = () => {
     first_name: "Loading",
     last_name: "User",
     email: "loading@example.com",
-    roles: [{ name: "guest" }],
+    roles: [{ name: "" }],
   });
   const [formData, setFormData] = useState({
     current_password: "",
@@ -25,20 +26,12 @@ const Navbar = () => {
   const [oldPassword, setOldPassword] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastSuccess, setToastSuccess] = useState(null);
-  // Fetch user data
-  useEffect(() => {
-    const fetchUser = async () => {
-      const data = await getUser();
-      if (data) {
-        const userData = data.data;
-        setUser(userData);
-      }
-    };
-    fetchUser();
-  }, []);
 
+  
+  
   const getUser = async () => {
     const accessToken = localStorage.getItem("access_token");
+
     if (!accessToken) {
       console.error("Access token not found!");
       return;
@@ -53,12 +46,24 @@ const Navbar = () => {
         },
       });
 
-      return response.json();
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user data: ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
-
+  const fetchUser = async () => {
+    const data = await getUser();
+    if (data) {
+      setUser(data.data);
+    }
+  };
+useEffect(() => {
+  fetchUser();
+},[])
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -77,7 +82,7 @@ const Navbar = () => {
       ...prev,
       [name]: value,
     }));
-  
+
     if (name === "confirm_password" && value !== formData.new_password) {
       setPasswordMatchError(true);
     } else {
@@ -101,42 +106,49 @@ const Navbar = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({
-          current_password: formData.current_password,
-          new_password: formData.new_password,
-          confirm_password: formData.confirm_password,
-        }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
-      console.log(data);
-      
-      if(data.success === false){
-        toast.error(data.message,{autoClose:false});
-        toast.error(data.errors.new_password[0],{autoClose:false});
+
+      if (data.success === false) {
+        toast.error(data.message, { autoClose: false });
+        toast.error(data.errors.new_password[0], { autoClose: false });
         return;
       }
-      toast.success(data.message,{autoClose:1000});
+      toast.success(data.message, { autoClose: 1000 });
       togglePasswordModal();
-      formData.current_password = "";
-      formData.new_password = "";
-      formData.confirm_password = "";
+      setFormData({
+        current_password: "",
+        new_password: "",
+        confirm_password: "",
+      });
     } catch (error) {
-      toast.error("Failed to change the password",{autoClose:false});
+      toast.error("Failed to change the password", { autoClose: false });
       console.error("Error changing password:", error);
     }
   };
 
+  const hasSuperAdminRole = useMemo(() => {
+    return user.roles.some((role) => role.name === "super-admin");
+  }, [user.roles]);
+
   const { first_name, last_name, email, roles } = user;
   const name = `${first_name} ${last_name}`;
   const firstChar = first_name.charAt(0).toUpperCase();
+  useEffect(() => {
+    if (roles && roles.length > 0) {
+      const roleNames = roles.map((role) => role.name); 
+      localStorage.setItem("roles", roleNames.join(",")); 
+    }
+  }, [roles]);
 
   return (
     <>
       <nav className="flex items-center justify-between bg-gray-900 p-4 mb-8">
         <div className="text-white font-bold text-xl">
           <a href="/dashboard">
-            <img src="/logo.png" alt="Brand Logo" className="h-8" />
+            <img src="/logo.png" alt="Brand Logo" className="h-12 w-auto" />
           </a>
         </div>
         <div className="flex items-center space-x-16">
@@ -144,9 +156,11 @@ const Navbar = () => {
             <a href="/users" className="text-white hover:text-blue-400">
               Users
             </a>
-            {/* <a href="/stats" className="text-white hover:text-blue-400">
-              Stats
-            </a> */}
+            {hasSuperAdminRole && (
+              <a href="/contact-list" className="text-white hover:text-blue-400">
+                Contacts
+              </a>
+            )}
           </menu>
           <div className="relative">
             <div

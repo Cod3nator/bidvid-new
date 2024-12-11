@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Bounce, ToastContainer } from "../utils/nextToast.js";
 import "react-toastify/dist/ReactToastify.css";
-import {GoogleAnalytics,GoogleTagManager } from "@next/third-parties/google";
+import {GoogleTagManager} from "@next/third-parties/google";
 export const metadata = {
   title: "BidVid",
   description: "Your Ad optimizer",
@@ -20,7 +20,6 @@ export default function RootLayout({ children }) {
         
       </head>
       <body>
-         <GoogleAnalytics gaId="GTM-MZ2T8MVC"/>
          <GoogleTagManager gtmId="GTM-MZ2T8MVC" />
         {children}
         <ToastContainer

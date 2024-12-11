@@ -108,7 +108,7 @@ const Page = () => {
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
-            <img src="/logo.png" alt="Brand Logo" className="mx-auto" />
+          <img src="/logo.png" alt="Brand Logo" className="mx-auto h-32 w-auto" />
           </div>
         </div>
 

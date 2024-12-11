@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <nav>
       <div className="container navbar">
-        <div className="icon">
+        <div className="icon-logo">
           <a href="/"><img src="/logo.png" alt="bidvid logo" /></a>
         </div>
         <menu>

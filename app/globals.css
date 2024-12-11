@@ -69,6 +69,10 @@ nav {
   width: 100%;
   display: flex;
 }
+.icon-logo img{
+  max-height: 42px;
+  width: auto;
+}
 .navbar {
   width: 100%;
   display: flex;
