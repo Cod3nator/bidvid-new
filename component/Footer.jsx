@@ -12,7 +12,7 @@ const Footer = () => {
             <menu>
               <ul>
                 <li>
-                  <a href="/contact">Contact Us</a>
+                  <a href="/contact-us">Contact Us</a>
                 </li>
                 <li>
                   <a href="/about">About Us</a>

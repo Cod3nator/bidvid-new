@@ -1523,6 +1523,7 @@ textarea::placeholder {
 @media (max-width: 768px) {
   .contact-container {
     padding: 40px 0;
+    padding-top: 85px;
   }
   .contact-text{
     gap: 16px;
