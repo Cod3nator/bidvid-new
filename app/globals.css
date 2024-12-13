@@ -380,9 +380,13 @@ h1 {
     padding: 0px 24px;
   }
 
-/* .text-swap{
+.text-swap{
   width: 170px;
-} */
+}
+ .text-swap .text-content {
+   font-size: 14px;
+   text-indent: 20px;
+}
 
 
   .banner-content {
