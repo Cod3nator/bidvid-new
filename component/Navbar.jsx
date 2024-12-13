@@ -5,7 +5,7 @@ const Navbar = () => {
     <nav>
       <div className="container navbar">
         <div className="icon-logo">
-          <a href="/"><img src="/logo.png" alt="bidvid logo" /></a>
+          <a href="/"><img src="/logo_new.png" alt="bidvid logo" /></a>
         </div>
         <menu>
           <ul>

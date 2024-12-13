@@ -1,7 +1,8 @@
 "use client"
 import Contact_us from '../../component/Contact_us';
 import React from 'react'
-import Navbar from '../../component/navbar';
+import Navbar from '../../component/Navbar';
+import Footer from '@/component/Footer';
 
 const About_us = () => {
   const teamMembers = [
@@ -139,6 +140,7 @@ const About_us = () => {
 
    </section>
    <Contact_us/>
+   <Footer/>
    </>
   )
 }

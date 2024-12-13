@@ -8,7 +8,7 @@ import Features from "../component/Features";
 import Stats from "../component/Stats";
 import Faq from "../component/Faq";
 import Contact_us from "../component/Contact_us";
-import Navbar from "../component/navbar";
+import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
 
 const ScrollPage = () => {

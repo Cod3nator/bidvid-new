@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="footer-dis">
           <div className="footer">
             <div className="icon-logo">
-              <img src="/logo.png" alt="bidvid logo" />
+              <img src="/logo_new.png" alt="bidvid logo" />
             </div>
             <menu>
               <ul>

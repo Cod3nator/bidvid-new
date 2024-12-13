@@ -2,7 +2,7 @@
 import Contact_us from '../../component/Contact_us'
 import Faq from '../../component/Faq'
 import Footer from '../../component/Footer'
-import Navbar from '../../component/navbar'
+import Navbar from '../../component/Navbar'
 import React from 'react'
 
 const Page = () => {

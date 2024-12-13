@@ -38,13 +38,20 @@ body {
   .container {
     max-width: 720px;
     margin: 0 auto;
-    padding: 24px;
+    padding:0  24px ;
+  }
+}
+@media (width < 992px) {
+  .container {
+    margin: 0 auto;
+    padding:0  24px ;
   }
 }
 @media (min-width: 992px) {
   .container {
     max-width: 960px;
     margin: 0 auto;
+    padding:0  24px ;
   }
 }
 @media (min-width: 1200px) {
@@ -73,12 +80,14 @@ nav {
   max-height: 42px;
   width: auto;
 }
-.navbar {
+.navbar,
+.footer {
   width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 16px 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
   gap: 30px;
 }
 .navbar ul,
@@ -97,12 +106,35 @@ nav {
 .footer-bar li a {
   cursor: pointer;
 }
-
+footer {
+  position: relative;
+  background-color: var(--black);
+}
+.footer-bar {
+  display: block;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+.footer-dis span{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: var(--white-text);
+  opacity: 70%;
+  padding-bottom: 34px;
+  font-size: 14px;
+}
 @media (max-width: 768px) {
   .navbar {
-    margin: 0 24px;
+    justify-content: space-between;
   }
-  .navbar ul {
+  .navbar ul li a,
+  .footer ul li a{
+    font-size: 12px;
+  }
+  .navbar ul li:nth-child(3){
     display: none;
   }
   .navbar .icon {
@@ -112,25 +144,11 @@ nav {
     height: 100%;
   }
 }
-footer {
-  position: relative;
-  background-color: var(--black);
-  padding: 16px;
-}
-.footer-bar {
-  display: block;
-}
-.footer {
-  display: flex;
-  justify-content: space-between;
-}
+
 .scroll_page {
   height: 100%;
   background-color: var(--black);
-  /* background-image: linear-gradient(180deg, #101010, #10107d); */
   width: 100%;
-  /* position: fixed; */
-  /* position: relative; */
   top: 0%;
   left: 0%;
   display: flex;
@@ -361,28 +379,33 @@ h1 {
     margin-top: 60px;
     padding: 0px 24px;
   }
+
+/* .text-swap{
+  width: 170px;
+} */
+
+
   .banner-content {
     margin-top: 24px;
-    padding: auto 24px;
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: start;
+    align-items: start;
   }
   .banner-text-btn {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 52px;
+    justify-content: start;
+    align-items: start;
+    gap: 32px;
   }
   .banner-text {
     display: flex;
     flex-direction: column;
-    /* justify-content: center;
-    align-items: center; */
-    text-align: center;
+    justify-content: center;
+    align-items: start;
+    text-align: start;
     gap: 16px;
   }
 
@@ -392,6 +415,7 @@ h1 {
   .banner-text p {
     max-width: 85%;
     padding-right: 0px;
+    text-align: start;
   }
   .banner-heading {
     gap: 24px;
@@ -400,6 +424,8 @@ h1 {
   h1 {
     font-size: 35px;
     width: 100%;
+
+    text-align: start;
   }
 
   .banner-text-btn button {
@@ -440,13 +466,12 @@ h1 {
   .star-row {
     display: flex;
   }
+  .inter-button{
+    width: 100%;
+    padding: 22px 60px;
+  }
   .scrolling-animation {
     display: none;
-    /* justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 30%;
-    background-color: transparent; */
   }
 }
 
@@ -1450,12 +1475,9 @@ textarea::placeholder {
 }
 
 .contact button {
-  width: max-content;
   background-color: black;
-  padding: 24px 60px;
-  font-size: 18px;
   color: #fff;
-  font-weight: 400;
+  font-weight: 600;
   border-radius: 65px;
 }
 
@@ -1514,6 +1536,9 @@ textarea::placeholder {
     width: 100%;
     margin-top: 12px;
     gap: 24px;
+  }
+  .contact button{
+    padding: 15px 60px;
   }
   .form-inputs {
     display: flex;
@@ -1729,7 +1754,7 @@ textarea::placeholder {
 }
 @media (max-width: 768px) {
   .about-us {
-    margin-top: 40px;
+    margin-top: 60px;
     padding-top: 40px;
   }
   .about-wrapper {
@@ -1740,6 +1765,13 @@ textarea::placeholder {
   .about-content {
     width: 100%;
     margin-bottom: 40px;
+  }
+  .about-content h2 {
+    font-size: 24px;
+  }
+  .about-content p {
+    text-align: start;
+    font-size: 16px;
   }
   .about-us-detail {
     padding-top: 40px;
