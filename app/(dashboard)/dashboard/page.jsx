@@ -9,15 +9,13 @@ const ChartPage = () => {
     if (iframe) {
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
-     console.log(screenWidth,screenHeight);
-     
-      // Set iframe dimensions to match the screen size
+// Set iframe dimensions to match the screen size
       iframe.style.width = `${screenWidth}px`;
       iframe.style.height = `${screenHeight - 100}px`;
 
       // Adjust scale based on a preferred zoom-out factor
       const scaleFactor = Math.min(screenWidth / 1200, screenHeight / 800); // Adjust these ratios as needed
-      console.log(scaleFactor);
+     
       
       setScale(scaleFactor);
     }

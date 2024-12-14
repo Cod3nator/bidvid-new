@@ -27,8 +27,6 @@ const Navbar = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [toastSuccess, setToastSuccess] = useState(null);
 
-  
-  
   const getUser = async () => {
     const accessToken = localStorage.getItem("access_token");
 
@@ -59,15 +57,17 @@ const Navbar = () => {
     const data = await getUser();
     if (data) {
       setUser(data.data);
+    
     }
   };
-useEffect(() => {
-  fetchUser();
-},[])
+  useEffect(() => {
+    fetchUser();
+  }, []);
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user");
+    localStorage.removeItem("roles");
     window.location.href = "/login";
   };
 
@@ -138,8 +138,8 @@ useEffect(() => {
   const firstChar = first_name.charAt(0).toUpperCase();
   useEffect(() => {
     if (roles && roles.length > 0) {
-      const roleNames = roles.map((role) => role.name); 
-      localStorage.setItem("roles", roleNames.join(",")); 
+      const roleNames = roles.map((role) => role.name);
+      localStorage.setItem("roles", roleNames.join(","));
     }
   }, [roles]);
 
@@ -148,16 +148,16 @@ useEffect(() => {
       <nav className="flex items-center justify-between bg-gray-900 p-4 mb-8">
         <div className="text-white font-bold text-xl">
           <a href="/dashboard">
-            <img src="/logo.png" alt="Brand Logo" className="h-12 w-auto" />
+            <img src="/logo_new.png" alt="Brand Logo" className="h-12 w-auto" />
           </a>
         </div>
         <div className="flex items-center space-x-16">
           <menu className="flex items-center space-x-4">
-            <a href="/users" className="text-white hover:text-blue-400">
-              Users
-            </a>
             {hasSuperAdminRole && (
-              <a href="/contact-list" className="text-white hover:text-blue-400">
+              <a
+                href="/contact-list"
+                className="text-white hover:text-blue-400"
+              >
                 Contacts
               </a>
             )}
@@ -182,6 +182,12 @@ useEffect(() => {
                   </p>
                 )}
                 <hr className="my-2" />
+                <button className="w-full text-sm text-blue-600 bg-gray-100 py-1 rounded-md hover:bg-blue-100">
+                  <a href="/users" className="">
+                    Users
+                  </a>
+                </button>
+
                 <button
                   onClick={() => {
                     togglePasswordModal();
@@ -204,7 +210,10 @@ useEffect(() => {
       </nav>
       {isModalOpen && (
         <>
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40"  onClick={togglePasswordModal}/>
+          <div
+            className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40"
+            onClick={togglePasswordModal}
+          />
           <div
             className="absolute bg-white p-6 shadow-lg w-96 flex flex-col justify-center items-center rounded-lg"
             style={{
@@ -218,42 +227,45 @@ useEffect(() => {
             <form onSubmit={handleResetPassword}>
               {!oldPassword && (
                 <>
-                <div className="form-group relative">
-                  <input
-                    type={passwordVisible ? "text" : "password"}
-                    name="current_password"
-                    placeholder="Current Password"
-                    value={formData.current_password}
-                    onChange={handlePasswordChange}
-                    className="p-2 w-full border placeholder:text-gray-400"
-                    required
-                  />
-                  <label htmlFor="new_password">Current Password</label>
+                  <div className="form-group relative">
+                    <input
+                      type={passwordVisible ? "text" : "password"}
+                      name="current_password"
+                      placeholder="Current Password"
+                      value={formData.current_password}
+                      onChange={handlePasswordChange}
+                      className="p-2 w-full border placeholder:text-gray-400"
+                      required
+                    />
+                    <label htmlFor="new_password">Current Password</label>
+                    <button
+                      type="button"
+                      onClick={() => setPasswordVisible(!passwordVisible)}
+                      className="absolute inset-y-0 right-2 text-gray-500 text-sm focus:outline-none"
+                    >
+                      {passwordVisible ? <EyeOff /> : <Eye />}
+                    </button>
+                  </div>
                   <button
-                    type="button"
-                    onClick={() => setPasswordVisible(!passwordVisible)}
-                    className="absolute inset-y-0 right-2 text-gray-500 text-sm focus:outline-none"
+                    onClick={() => {
+                      if (formData.current_password) {
+                        setOldPassword(true);
+                      } else {
+                        setOldPassword(false);
+                      }
+                    }}
+                    className="bg-blue-600 text-white py-2 rounded-md w-full"
                   >
-                    {passwordVisible ? <EyeOff /> : <Eye />}
+                    Change Password
                   </button>
-                </div>
-                <button
-                onClick={()=>{
-                  if(formData.current_password){
-                    setOldPassword(true)
-                  }else{
-                    setOldPassword(false)
-                  }
-                }}
-                className="bg-blue-600 text-white py-2 rounded-md w-full"
-              >
-                Change Password
-              </button>
                 </>
               )}
               {oldPassword && (
                 <>
-                     <span className="p-4" onClick={()=>setOldPassword(false)}> <ArrowLeft /></span>
+                  <span className="p-4" onClick={() => setOldPassword(false)}>
+                    {" "}
+                    <ArrowLeft />
+                  </span>
                   <div className="mb-6">
                     <div className="form-group relative">
                       <input
@@ -295,23 +307,20 @@ useEffect(() => {
                     )}
                   </div>
                   <button
-                type="submit"
-                className="bg-blue-600 text-white py-2 rounded-md w-full"
-                disabled={passwordMatchError}
-              >
-                Set Password
-              </button>
+                    type="submit"
+                    className="bg-blue-600 text-white py-2 rounded-md w-full"
+                    disabled={passwordMatchError}
+                  >
+                    Set Password
+                  </button>
                 </>
               )}
-             
             </form>
           </div>
         </>
       )}
 
-      {toastSuccess && (
-        <Toast success={toastSuccess} message={toastMessage} />
-      )}
+      {toastSuccess && <Toast success={toastSuccess} message={toastMessage} />}
     </>
   );
 };

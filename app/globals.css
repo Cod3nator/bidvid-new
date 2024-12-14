@@ -80,7 +80,8 @@ nav {
   max-height: 42px;
   width: auto;
 }
-.navbar,
+
+
 .footer {
   width: 100%;
   display: flex;
@@ -89,6 +90,35 @@ nav {
   padding-top: 16px;
   padding-bottom: 16px;
   gap: 30px;
+}
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  gap: 30px;
+}
+.logo-menu-wrap{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+.navbar button{
+  border: 2px solid var(--blue);
+  color: var(--blue);
+  background-color: transparent;
+  padding: 2.5px 16px;
+  border-radius: 24px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.navbar button a{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 16px;
 }
 .navbar ul,
 .footer-bar ul {
@@ -129,6 +159,17 @@ footer {
 @media (max-width: 768px) {
   .navbar {
     justify-content: space-between;
+    gap: 0px;
+  }
+  .navbar button{
+    display: none;
+  }
+  .logo-menu-wrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
   }
   .navbar ul li a,
   .footer ul li a{
@@ -1956,18 +1997,4 @@ textarea::placeholder {
   .dash-layout{
     height: 100lvh;
   }
-}
-
-
-
-
-/* #scaled-frame {
-  width: 1000px;
-  height: 2000px;
-  border: 0px;
-} */
-
-#scaled-frame {
-  /* zoom:90%; */
-
 }

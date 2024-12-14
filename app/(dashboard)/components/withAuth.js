@@ -1,4 +1,3 @@
-const API_URL = 'http://localhost:5000/api';
 const backend_api = "https://devapi.bidvid.in";
 const getAccessToken = () => {
   return localStorage.getItem('access_token') || '';
