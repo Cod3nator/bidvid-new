@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown, ChevronUp, Check } from "lucide-react";
+import { ChevronDown, ChevronUp, Check, Pencil } from "lucide-react";
 
 const backend_api = "https://devapi.bidvid.in";
 const Users = () => {
@@ -152,21 +152,52 @@ const Users = () => {
               <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                 Email
               </th>
+              <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
+                Status
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-medium text-gray-600"></th>
               {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                 Signup Date
               </th> */}
             </tr>
           </thead>
           <tbody>
-            {userData && userData?.map((user, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-800">
-                  {`${user.first_name} ${user.last_name}`}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-800">
-                  {user.email}
-                </td>
-                {/* <td className="px-6 py-4 text-sm text-gray-800">
+            {userData &&
+              userData?.map((user, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {`${user.first_name} ${user.last_name}`}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {user.email}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {true ? (
+                      <span className="text-green-500 bg-green-100 py-1 px-4 rounded-lg border border-green-300">
+                        Active
+                      </span>
+                    ) : (
+                      <span className="text-red-500 bg-red-200 py-1 px-4 rounded-lg border border-red-300">
+                        Not Active
+                      </span>
+                    )}
+                  </td>
+                  <td
+                    className="px-6 py-4 text-sm text-gray-800 hover:cursor-pointer hover:bg-blue-200 flex justify-center items-center"
+                    onClick={() => {
+                      const confirmed = window.confirm(
+                        "Are you sure you want to make changes to the user data url?"
+                      );
+                      if (confirmed) {
+                        // Proceed with your logic to make changes to the user data (e.g., navigate to the user data URL)
+                        console.log("User data will be changed.");
+                      }
+                    }}
+                  >
+                    <Pencil size={20} strokeWidth={1.25} />
+                  </td>
+
+                  {/* <td className="px-6 py-4 text-sm text-gray-800">
                   {user.status === 1 ? (
                     <span className="text-green-500 bg-green-100 py-1 px-4 rounded-lg border border-green-300">
                       Active
@@ -179,11 +210,11 @@ const Users = () => {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-800">{user.role}</td> */}
 
-                {/* <td className="px-6 py-4 text-sm text-gray-800">
+                  {/* <td className="px-6 py-4 text-sm text-gray-800">
                   {user.signupDate}
                 </td> */}
-              </tr>
-            ))}
+                </tr>
+              ))}
             {filteredUsers.length === 0 && (
               <tr>
                 <td colSpan="6" className="px-6 py-4 text-center text-gray-500">

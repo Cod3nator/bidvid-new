@@ -2,18 +2,13 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { EyeOff, Eye } from "lucide-react";
-import Toast from "@/component/dashboard/Toast";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
 
-const Navbar = () => {
-  const [user, setUser] = useState({
-    first_name: "Loading",
-    last_name: "User",
-    email: "loading@example.com",
-    roles: [{ name: "" }],
-  });
+const Navbar = ({user,role}) => {
+   console.log(role);
+   
   const [formData, setFormData] = useState({
     current_password: "",
     new_password: "",
@@ -24,45 +19,8 @@ const Navbar = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [oldPassword, setOldPassword] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSuccess, setToastSuccess] = useState(null);
 
-  const getUser = async () => {
-    const accessToken = localStorage.getItem("access_token");
-
-    if (!accessToken) {
-      console.error("Access token not found!");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${backend_api}/my-profile`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch user data: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-  const fetchUser = async () => {
-    const data = await getUser();
-    if (data) {
-      setUser(data.data);
-    
-    }
-  };
-  useEffect(() => {
-    fetchUser();
-  }, []);
+ 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -129,37 +87,34 @@ const Navbar = () => {
     }
   };
 
-  const hasSuperAdminRole = useMemo(() => {
-    return user.roles.some((role) => role.name === "super-admin");
-  }, [user.roles]);
 
-  const { first_name, last_name, email, roles } = user;
+  const { first_name, last_name, email} = user;
   const name = `${first_name} ${last_name}`;
   const firstChar = first_name.charAt(0).toUpperCase();
-  useEffect(() => {
-    if (roles && roles.length > 0) {
-      const roleNames = roles.map((role) => role.name);
-      localStorage.setItem("roles", roleNames.join(","));
-    }
-  }, [roles]);
-
+ 
   return (
     <>
       <nav className="flex items-center justify-between bg-gray-900 p-4 mb-8">
         <div className="text-white font-bold text-xl">
-          <a href="/dashboard">
+          <a href={role === "super-admin" ? "/super-admin" : "/dashboard"}>
             <img src="/logo_new.png" alt="Brand Logo" className="h-12 w-auto" />
           </a>
         </div>
         <div className="flex items-center space-x-16">
-          <menu className="flex items-center space-x-4">
-            {hasSuperAdminRole && (
-              <a
+          <menu className="flex items-center ">
+            {role === "super-admin" && (
+             <ul className="flex items-center space-x-4">
+               <a
                 href="/contact-list"
                 className="text-white hover:text-blue-400"
               >
                 Contacts
               </a>
+              {/* <a href="/users"  className="text-white hover:text-blue-400">
+                    Users
+                  </a> */}
+              
+             </ul>
             )}
           </menu>
           <div className="relative">
@@ -176,17 +131,16 @@ const Navbar = () => {
               >
                 <p className="font-bold text-lg">{name}</p>
                 <p className="text-sm text-gray-600">{email}</p>
-                {roles.length > 0 && (
-                  <p className="mt-2 text-sm text-gray-700">
-                    Roles: {roles.map((role) => role.name).join(", ")}
-                  </p>
-                )}
+                {role && <p className="mt-2 text-sm text-gray-700">
+                    Roles: {role}
+                  </p>}
+             
                 <hr className="my-2" />
-                <button className="w-full text-sm text-blue-600 bg-gray-100 py-1 rounded-md hover:bg-blue-100">
+                {/* <button className="w-full text-sm text-blue-600 bg-gray-100 py-1 rounded-md hover:bg-blue-100">
                   <a href="/users" className="">
                     Users
                   </a>
-                </button>
+                </button> */}
 
                 <button
                   onClick={() => {
@@ -319,8 +273,6 @@ const Navbar = () => {
           </div>
         </>
       )}
-
-      {toastSuccess && <Toast success={toastSuccess} message={toastMessage} />}
     </>
   );
 };
