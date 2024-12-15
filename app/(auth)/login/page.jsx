@@ -84,11 +84,12 @@ const Page = () => {
           body: JSON.stringify({ email: restPassMail }),
         }
       );
-      const resp = await response.json();
+      const resp = await response.json();     
       if (!response.success || !response) {
         toast.error(`${resp.message}`, { autoClose: false });
         throw new Error("Failed to send forgot password email");
       }
+      toast.success({resp},{autoClose:false});
       toast.success("Password reset email sent successfully.");
       handleCloseModal();
     } catch (error) {

@@ -7,8 +7,6 @@ import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
 
 const Navbar = ({user,role}) => {
-   console.log(role);
-   
   const [formData, setFormData] = useState({
     current_password: "",
     new_password: "",

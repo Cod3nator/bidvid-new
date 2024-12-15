@@ -1,17 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Navbar from "./components/Dash_Navbar";
 
 const backend_api = "https://devapi.bidvid.in";
 
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null); // New state to store the user's role
-  const [isLoading, setIsLoading] = useState(true);
+  const [role, setRole] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); 
   const router = useRouter();
+  const pathname = usePathname();
 
-  // Fetch user details and set state
   useEffect(() => {
     const fetchUserDetails = async () => {
       const accessToken = localStorage.getItem("access_token");
@@ -41,19 +41,28 @@ export default function DashboardLayout({ children }) {
         const userRole = data.data.roles.length > 0 ? data.data.roles[0].name : null;
         setRole(userRole);
 
-        if (role === "super-admin" && pathname === "/") {
-          router.push("/contact-list");
-        }
       } catch (error) {
         console.error("Error fetching user details:", error);
         router.push("/login");
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); 
       }
     };
 
     fetchUserDetails();
   }, [router]);
+
+  useEffect(() => {
+    if (role) { 
+      if (role === "super-admin") {
+        if (pathname === "/") {
+          router.push("/contact-list");
+        } else if (pathname === "/dashboard") {
+          router.push("/super-admin");
+        }
+      }
+    }
+  }, [role, pathname, router]); 
 
   if (isLoading) {
     return (
@@ -71,7 +80,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="dash-layout bg-gray-100">
-      <Navbar user={user} role={role} /> 
+      <Navbar user={user} role={role} />
       {children}
     </div>
   );
