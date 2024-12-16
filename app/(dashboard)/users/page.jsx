@@ -63,15 +63,12 @@ const Users = () => {
       });
       const resp = await response.json();
       if (response.status === 200) {
-        console.log(resp);
-
         toast.success("User updated successfully", { autoClose: 1000 });
         setUserData((prev) =>
           prev.map((user) => (user.id === selectedUser.id ? resp.data : user))
         );
         setOpenEditUser(false);
       } else {
-        console.log(resp);
         setErrors(resp.errors);
         toast.error("Failed to update user", { autoClose: 1000 });
       }
@@ -80,9 +77,6 @@ const Users = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(error);
-  }, [error]);
   const toggleUserModal = () => {
     setOpenEditUser((prev) => !prev);
   };

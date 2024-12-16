@@ -16,6 +16,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [loadingReq, setLoadingReq] = useState(false);
   const [restPassMail, setRestPassMail] = useState("");
+  const [requestMailError, setRequestMailError] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -48,12 +49,13 @@ const Page = () => {
 
       const data = await res.json();
       if (!res.ok) {
-        toast.error(`${data.message}`, { autoClose: false });
-        throw new Error(data.error || "Login failed");
+        console.log(res);
+        toast.error(data.message || "Something went wrong", { autoClose: false });
+        return;
       }
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
-      router.push("/dashboard");
+      setTimeout(() => router.push("/dashboard"), 1000);
       toast.success("Logged in successfully",{autoClose:1000});
     
     } catch (error) {
@@ -85,15 +87,17 @@ const Page = () => {
         }
       );
       const resp = await response.json();     
-      if (!response.success || !response) {
-        toast.error(`${resp.message}`, { autoClose: false });
-        throw new Error("Failed to send forgot password email");
+      if (!resp.success ) {
+        setRequestMailError(resp.message);
+        toast.error(`${resp.message}`);
+        return;
       }
       toast.success({resp},{autoClose:false});
       toast.success("Password reset email sent successfully.");
       handleCloseModal();
     } catch (error) {
       console.error("Error sending forgot password email:", error);
+     
       toast.error("Failed to send forgot password email.");
     } finally {
       setLoadingReq(false);
@@ -187,13 +191,16 @@ const Page = () => {
           >
             <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
             <form>
-              <div className="form-group mb-4">
+              <div className="form-group mb-1">
                 <input
                   type="text"
                   name="email"
                   placeholder="Email Id"
                   value={formData.userId}
-                  onChange={(e) => setRestPassMail(e.target.value)}
+                  onChange={(e) => {
+                    setRequestMailError("");
+                    setRestPassMail(e.target.value)
+                  }}
                   className="border p-2 w-full"
                   required
                 />
@@ -201,6 +208,9 @@ const Page = () => {
                   Email Id
                 </label>
               </div>
+              {requestMailError && (
+                <p className="text-red-500 mb-4">{requestMailError}</p>
+              )}
               <div className="flex justify-center items-center space-x-4">
                 <button
                   onClick={handleForgotPassword}

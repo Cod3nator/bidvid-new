@@ -1,8 +1,7 @@
 "use client";
 import { validateName } from "@/utils/validationFunction";
-import Toast from "../../../component/dashboard/Toast";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EyeOff, Eye, BadgeAlert } from "lucide-react";
 import { toast } from "react-toastify";
 const backend_api = "https://devapi.bidvid.in";
@@ -15,7 +14,13 @@ const Page = () => {
     confirm_password: "",
   });
 
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+  });
   const [loading, setLoading] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -25,7 +30,11 @@ const Page = () => {
   const handleChange = (e) => {
     setLoading(false);
     const { name, value } = e.target;
-
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: null,
+    }));
+    
     setFormData((prevData) => ({
       ...prevData,
       [name]:
@@ -35,8 +44,7 @@ const Page = () => {
     }));
 
     if (name === "password") {
-      const isStrongPassword = /^[A-Za-z\d]{8,}$/.test(value);
-
+      const isStrongPassword = /^[A-Za-z\d_]{8,}$/.test(value);
       const isTooShort = value.length < 8;
 
       if (!isStrongPassword) {
@@ -59,7 +67,7 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setErrors(null);
 
     if (formData.password !== formData.confirm_password) {
       setPasswordMatchError(true);
@@ -78,13 +86,14 @@ const Page = () => {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Sign-up failed");
+      if (!data.success) {
+        setErrors(data.errors);
+        toast.error(data.message, { autoClose: false });
+        return;
       }
       toast.success("Sign-up successful");
       router.push("/login");
     } catch (error) {
-      setError(error.message);
       toast.error(error.message, { autoClose: false });
       toast.error("Sign-up failed");
       console.error("Sign-up failed:", error.message);
@@ -92,13 +101,17 @@ const Page = () => {
       setLoading(false);
     }
   };
+  
   return (
     <>
-   
       <div className="flex min-h-screen">
         <div className="w-1/2 bg-gray-800 flex justify-center items-center">
           <div className="text-center">
-          <img src="/logo.png" alt="Brand Logo" className="mx-auto h-24 w-auto" />
+            <img
+              src="/logo.png"
+              alt="Brand Logo"
+              className="mx-auto h-24 w-auto"
+            />
           </div>
         </div>
 
@@ -159,6 +172,12 @@ const Page = () => {
                     Email Address
                   </label>
                 </div>
+                {errors?.email &&
+                  errors?.email?.map((error, index) => (
+                    <span key={index} className="text-red-500">
+                      {error}
+                    </span>
+                  ))}
               </div>
 
               <div className="mb-6">
@@ -183,6 +202,12 @@ const Page = () => {
                     {passwordVisible ? <EyeOff /> : <Eye />}
                   </button>
                 </div>
+                {errors?.password &&
+                  errors?.password?.map((error, index) => (
+                    <span key={index} className="text-red-500">
+                      {error}
+                    </span>
+                  ))}
                 {formData.password.length > 0 && (
                   <ul>
                     <li
@@ -222,6 +247,12 @@ const Page = () => {
                     Confirm Password
                   </label>
                 </div>
+                {errors?.confirm_password &&
+                  errors?.confirm_password?.map((error, index) => (
+                    <span key={index} className="text-red-500">
+                      {error}
+                    </span>
+                  ))}
                 {passwordMatchError && (
                   <small className="text-red-500">
                     Passwords do not match.
