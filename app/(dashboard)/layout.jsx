@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Navbar from "./components/Dash_Navbar";
+import { UserProvider, useUser } from "../lib/UserContext";
 
 const backend_api = "https://devapi.bidvid.in";
 
@@ -11,6 +12,8 @@ export default function DashboardLayout({ children }) {
   const [isLoading, setIsLoading] = useState(true); 
   const router = useRouter();
   const pathname = usePathname();
+   const { userDetail, setUserDetail } = useUser();
+   
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -36,8 +39,7 @@ export default function DashboardLayout({ children }) {
         }
 
         const data = await response.json();
-        setUser(data.data);
-
+        setUserDetail(data.data);
         const userRole = data.data.roles.length > 0 ? data.data.roles[0].name : null;
         setRole(userRole);
 
@@ -48,7 +50,7 @@ export default function DashboardLayout({ children }) {
         setIsLoading(false); 
       }
     };
-
+  
     fetchUserDetails();
   }, [router]);
 
@@ -57,13 +59,15 @@ export default function DashboardLayout({ children }) {
       if (role === "super-admin") {
         if (pathname === "/") {
           router.push("/contact-list");
-        } else if (pathname === "/dashboard") {
+        } else if (role === "super-admin" && pathname === "/dashboard") {
           router.push("/super-admin");
         }
       }
     }
   }, [role, pathname, router]); 
-
+  useEffect(() => {
+    console.log(userDetail);
+  },[userDetail])
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -74,14 +78,14 @@ export default function DashboardLayout({ children }) {
     );
   }
 
-  if (!user) {
+  if (!userDetail) {
     return null;
   }
 
   return (
     <div className="dash-layout bg-gray-100">
-      <Navbar user={user} role={role} />
-      {children}
-    </div>
+      <Navbar user={userDetail} role={role} />
+         {children}
+          </div>
   );
 }

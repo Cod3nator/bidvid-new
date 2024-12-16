@@ -1,52 +1,20 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown, ChevronUp, Check, Pencil } from "lucide-react";
+import React, { useState, useEffect, use } from "react";
+import { ChevronDown, ChevronUp, Pencil } from "lucide-react";
+import { toast } from "react-toastify";
 
 const backend_api = "https://devapi.bidvid.in";
+
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterRole, setFilterRole] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const [selectedRole, setSelectedRole] = useState("");
-
+  const [openEditUser, setOpenEditUser] = useState(false);
+  const [userData, setUserData] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const roles = ["Super Admin", "User", "Manager"];
+  const [error, setErrors] = useState({});
 
-  const dummyUsers = [
-    {
-      name: "John Doe",
-      status: 1,
-      type: "Premium",
-      role: "Super Admin",
-      email: "john.doe@example.com",
-      signupDate: "2024-11-01",
-    },
-    {
-      name: "Jane Smith",
-      status: 0,
-      type: "Standard",
-      role: "User",
-      email: "jane.smith@example.com",
-      signupDate: "2024-10-20",
-    },
-    {
-      name: "Alice Johnson",
-      status: 1,
-      type: "Premium",
-      role: "Manager",
-      email: "alice.johnson@example.com",
-      signupDate: "2024-09-15",
-    },
-    {
-      name: "Michael Brown",
-      status: 0,
-      type: "Basic",
-      role: "User",
-      email: "michael.brown@example.com",
-      signupDate: "2024-08-12",
-    },
-  ];
-  const [userData, setUserData] = useState();
+  // Fetch users on mount
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -67,21 +35,57 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  const handleToggle = () => {
-    setIsOpen((prev) => !prev);
-  };
-
   const handleOptionClick = (role) => {
-    setSelectedRole(role);
     setFilterRole(role);
-    setIsOpen(false);
   };
 
-  const filteredUsers = dummyUsers.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (filterRole ? user.role === filterRole : true)
-  );
+  const openEditUserModal = (user) => {
+    setOpenEditUser(true);
+    setSelectedUser(user);
+  };
+
+  const handleEditUser = async (event) => {
+    event.preventDefault();
+
+    const data = {
+      active: selectedUser.status,
+      report_url: selectedUser.report_url,
+    };
+
+    try {
+      const response = await fetch(`${backend_api}/users/${selectedUser.id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const resp = await response.json();
+      if (response.status === 200) {
+        console.log(resp);
+
+        toast.success("User updated successfully", { autoClose: 1000 });
+        setUserData((prev) =>
+          prev.map((user) => (user.id === selectedUser.id ? resp.data : user))
+        );
+        setOpenEditUser(false);
+      } else {
+        console.log(resp);
+        setErrors(resp.errors);
+        toast.error("Failed to update user", { autoClose: 1000 });
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
+  const toggleUserModal = () => {
+    setOpenEditUser((prev) => !prev);
+  };
 
   return (
     <div className="p-8 bg-gray-100 h-screen">
@@ -90,65 +94,14 @@ const Users = () => {
         style={{ borderRadius: "24px" }}
       >
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-bold">Users </h2>
-          <div className="flex space-x-4 items-center">
-            {/* Dropdown for Role Filter */}
-            {/* <div className="relative w-64" ref={dropdownRef}>
-              <button
-                className="flex items-center justify-between bg-gray-50 h-10 px-4 w-full rounded-md shadow-sm border border-gray-300 focus:outline-none"
-                onClick={handleToggle}
-              >
-                <span className="text-sm text-gray-700">
-                  {selectedRole || "Select Role"}
-                </span>
-                {isOpen ? (
-                  <ChevronUp className="w-4 h-4 text-gray-500" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
-                )}
-              </button>
-
-              {isOpen && (
-                <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-2 shadow-lg w-full">
-                  <li
-                    key="all"
-                    className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleOptionClick("")}
-                  >
-                    All Roles
-                  </li>
-                  {roles.map((role) => (
-                    <li
-                      key={role}
-                      className={`flex items-center justify-between px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 ${
-                        selectedRole === role ? "font-semibold" : ""
-                      }`}
-                      onClick={() => handleOptionClick(role)}
-                    >
-                      {role}
-                      {selectedRole === role && (
-                        <Check className="w-4 h-4 text-green-500" />
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div> */}
-          </div>
+          <h2 className="text-xl font-bold">Users</h2>
         </div>
-        {/* Table */}
         <table className="min-w-full bg-white rounded-md">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                 Name
               </th>
-              {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
-                Status
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
-                Role
-              </th> */}
               <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
                 Email
               </th>
@@ -156,14 +109,11 @@ const Users = () => {
                 Status
               </th>
               <th className="px-6 py-4 text-left text-sm font-medium text-gray-600"></th>
-              {/* <th className="px-6 py-4 text-left text-sm font-medium text-gray-600">
-                Signup Date
-              </th> */}
             </tr>
           </thead>
           <tbody>
-            {userData &&
-              userData?.map((user, index) => (
+            {userData.length > 0 ? (
+              userData.map((user, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm text-gray-800">
                     {`${user.first_name} ${user.last_name}`}
@@ -172,58 +122,141 @@ const Users = () => {
                     {user.email}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-800">
-                    {true ? (
+                    {user.status ? (
                       <span className="text-green-500 bg-green-100 py-1 px-4 rounded-lg border border-green-300">
                         Active
                       </span>
                     ) : (
                       <span className="text-red-500 bg-red-200 py-1 px-4 rounded-lg border border-red-300">
-                        Not Active
+                        Inactive
                       </span>
                     )}
                   </td>
                   <td
                     className="px-6 py-4 text-sm text-gray-800 hover:cursor-pointer hover:bg-blue-200 flex justify-center items-center"
                     onClick={() => {
-                      const confirmed = window.confirm(
-                        "Are you sure you want to make changes to the user data url?"
-                      );
-                      if (confirmed) {
-                        // Proceed with your logic to make changes to the user data (e.g., navigate to the user data URL)
-                        console.log("User data will be changed.");
-                      }
+                      openEditUserModal(user);
                     }}
                   >
                     <Pencil size={20} strokeWidth={1.25} />
                   </td>
-
-                  {/* <td className="px-6 py-4 text-sm text-gray-800">
-                  {user.status === 1 ? (
-                    <span className="text-green-500 bg-green-100 py-1 px-4 rounded-lg border border-green-300">
-                      Active
-                    </span>
-                  ) : (
-                    <span className="text-red-500 bg-red-200 py-1 px-4 rounded-lg border border-red-300">
-                      Not Active
-                    </span>
-                  )}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-800">{user.role}</td> */}
-
-                  {/* <td className="px-6 py-4 text-sm text-gray-800">
-                  {user.signupDate}
-                </td> */}
                 </tr>
-              ))}
-            {filteredUsers.length === 0 && (
+              ))
+            ) : (
               <tr>
-                <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                <td colSpan="4" className="px-6 py-4 text-center text-gray-500">
                   No users found
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+
+        {openEditUser && (
+          <>
+            <div
+              className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40"
+              onClick={toggleUserModal}
+            ></div>
+
+            <div
+              className="fixed bg-white p-6 shadow-lg w-96 flex flex-col justify-center items-center rounded-lg space-y-4"
+              style={{
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 50,
+              }}
+            >
+              <h2 className="text-lg font-semibold mb-4 align-start w-full">
+                Edit User
+              </h2>
+              <form
+                onSubmit={handleEditUser}
+                className="w-full gap-4 flex flex-col justify-center align-start"
+              >
+                <div className="mb-4">
+                  <div className="semibold">
+                    Name:{" "}
+                    <span className="text-gray-600 italic">{`${selectedUser.first_name} ${selectedUser.last_name}`}</span>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div>Status</div>
+                  <div
+                    onClick={() =>
+                      setSelectedUser((prev) => ({
+                        ...prev,
+                        status: !prev.status,
+                      }))
+                    }
+                    className={`relative inline-flex items-center w-16 h-8 rounded-full transition-colors ${
+                      selectedUser.status ? "bg-green-500" : "bg-gray-300"
+                    }`}
+                  >
+                    <span
+                      className={`absolute left-1 w-6 h-6 bg-white rounded-full shadow transition-transform ${
+                        selectedUser.status ? "translate-x-8" : "translate-x-0"
+                      }`}
+                    ></span>
+                    <span
+                      className={`absolute text-xs font-semibold uppercase ${
+                        selectedUser.status
+                          ? "left-24 text-green-500"
+                          : "left-24 text-gray-600"
+                      }`}
+                    >
+                      {selectedUser.status ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+                </div>
+                <div className="">
+                  <label
+                    htmlFor="report_url"
+                    className="block text-sm font-medium text-gray-900 mb-1"
+                  >
+                    Report URL
+                  </label>
+                  <input
+                    id="report_url"
+                    name="report_url"
+                    placeholder="Report URL"
+                    value={selectedUser.report_url || " "}
+                    onChange={(e) => {
+                      setErrors("");
+                      setSelectedUser((prev) => ({
+                        ...prev,
+                        report_url: e.target.value,
+                      }));
+                    }}
+                    className="p-2 w-full placeholder:text-gray-400 border-b-2 border-black focus:outline-none focus:ring-0"
+                  />
+                  {error && (
+                    <span className="text-red-500 text-sm">
+                      {error?.report_url}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex justify-end space-x-4">
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+                    onClick={toggleUserModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

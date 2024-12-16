@@ -29,6 +29,13 @@ const Navbar = ({user,role}) => {
 
   const togglePasswordModal = () => {
     setIsModalOpen((prev) => !prev);
+    if(!isModalOpen){
+      setFormData({
+        current_password: "",
+        new_password: "",
+        confirm_password: "", 
+      })
+    }
   };
 
   const handlePasswordChange = (e) => {
@@ -66,7 +73,6 @@ const Navbar = ({user,role}) => {
       });
 
       const data = await response.json();
-
       if (data.success === false) {
         toast.error(data.message, { autoClose: false });
         toast.error(data.errors.new_password[0], { autoClose: false });
@@ -134,13 +140,7 @@ const Navbar = ({user,role}) => {
                   </p>}
              
                 <hr className="my-2" />
-                {/* <button className="w-full text-sm text-blue-600 bg-gray-100 py-1 rounded-md hover:bg-blue-100">
-                  <a href="/users" className="">
-                    Users
-                  </a>
-                </button> */}
-
-                <button
+             <button
                   onClick={() => {
                     togglePasswordModal();
                     setClicked(false);

@@ -1,8 +1,3 @@
-
-const metadata = {
-  title: "BidVid",
-  description: "Your Ad optimizer",
-};
 export default function LoginLayout({ children }) {
   return (
     <>
@@ -12,3 +7,4 @@ export default function LoginLayout({ children }) {
     </>
   );
 }
+

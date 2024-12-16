@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { EyeOff, Eye } from 'lucide-react';
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";

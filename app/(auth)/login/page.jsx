@@ -21,6 +21,7 @@ const Page = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+       
     }));
   };
   const router = useRouter();
@@ -46,7 +47,6 @@ const Page = () => {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         toast.error(`${data.message}`, { autoClose: false });
         throw new Error(data.error || "Login failed");

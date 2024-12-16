@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 
 import Banner from "../component/Banner";
 import WhatsInside from "../component/WhatsInside";
@@ -12,9 +11,7 @@ import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
 
 const ScrollPage = () => {
-
-
-  return (
+return (
     <>
     <Navbar/>
       <section className="scroll_page">
